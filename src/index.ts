@@ -1,11 +1,12 @@
 // Library
 import { Command } from 'commander';
-import { readFileSync, writeFileSync } from 'fs';
-import { generateForceDirectedTreeGraph } from './forceDirectedGraph.js';
-import { Node } from './node.js';
+import { readFileSync } from 'node:fs';
+import { commands } from './cmd/index.js';
 
+// Instantiate program
 const program = new Command();
 
+// Read package.json
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 program
@@ -13,30 +14,18 @@ program
     .description(pkg.description)
     .version(pkg.version, '-v, --version', 'Output the current version');
 
-program
-    .command('snapshot')
-    .description('Create a snapshot of your workspace')
-    .argument('[path]', 'The path to the workspace', process.cwd())
-    .argument('[output]', 'The output file path', './tree.json')
-    .action((path, output) => {
-        // Create root
-        const root = Node.fromPath(path);
+// Add commands
+commands.forEach(cmd => {
+    const command = program
+        .command(cmd.name)
+        .description(cmd.description)
 
-        // Write to file
-        writeFileSync(output, JSON.stringify(root, null, 4));
-    });
+    cmd.args.forEach(arg => {
+        command.argument(arg.name, arg.description, arg.default)
+    })
 
-program
-    .command('graph')
-    .description('Create a graph of your workspace')
-    .argument('[path]', 'The path to the JSON file to graph', './tree.json')
-    .argument('[output]', 'The output file path', './graph.html')
-    .action((path, output) => {
-        // Read file
-        const root = JSON.parse(readFileSync(path, 'utf-8'));
+    command.action(cmd.run)
+})
 
-        // Generate graph
-        generateForceDirectedTreeGraph(root, output);
-    });
-
+// Parse arguments
 program.parse()
