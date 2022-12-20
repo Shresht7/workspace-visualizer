@@ -2,17 +2,19 @@
 import { writeFileSync } from "node:fs";
 import { Node } from "../node.js";
 
-export default {
+const command: Command = {
     name: "snapshot",
     description: "Create a snapshot of your workspace",
     args: [
+    ],
+    options: [
         {
-            name: "[path]",
+            name: "-p, --path [path]",
             description: "The path to the workspace",
             default: process.cwd()
         },
         {
-            name: "[output]",
+            name: "-o, --output [output]",
             description: "The output file path",
             default: "./tree.json"
         }
@@ -22,7 +24,7 @@ export default {
      * @param {string} path The path to the workspace
      * @param {string} output The output file path
      */
-    run: (path: string, output: string) => {
+    run: ({ path, output }: { path: string, output: string }) => {
         console.log('Creating snapshot...')
 
         // Create root
@@ -32,3 +34,5 @@ export default {
         writeFileSync(output, JSON.stringify(root, null, 4));
     }
 }
+
+export default command;

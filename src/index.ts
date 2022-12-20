@@ -20,10 +20,15 @@ commands.forEach(cmd => {
         .command(cmd.name)
         .description(cmd.description)
 
+    // Add arguments and options
     cmd.args.forEach(arg => {
         command.argument(arg.name, arg.description, arg.default)
     })
+    cmd.options.forEach(option => {
+        command.option(option.name, option.description, option.default)
+    })
 
+    // Add action
     command.action(cmd.run)
 })
 

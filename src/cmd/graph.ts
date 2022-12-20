@@ -2,17 +2,19 @@
 import { readFileSync } from "node:fs";
 import { generateForceDirectedTreeGraph } from "../forceDirectedGraph.js";
 
-export default {
+export const command: Command = {
     name: "graph",
     description: "Create a graph of your workspace",
     args: [
+    ],
+    options: [
         {
-            name: "[path]",
+            name: "-p, --path [path]",
             description: "The path to the JSON file to graph",
             default: "./tree.json"
         },
         {
-            name: "[output]",
+            name: "-o, --output [output]",
             description: "The output file path",
             default: "./graph.html"
 
@@ -23,7 +25,7 @@ export default {
      * @param {string} path The path to the JSON file to graph
      * @param {string} output The output file path
     */
-    run: (path: string, output: string) => {
+    run: ({ path, output }: { path: string, output: string }) => {
         console.log('Creating graph...')
 
         // Read file
@@ -33,3 +35,5 @@ export default {
         generateForceDirectedTreeGraph(root, output);
     }
 }
+
+export default command
