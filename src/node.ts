@@ -89,5 +89,4 @@ export class Node {
         return entry.startsWith('.') || entry === 'node_modules';
     }
 
-
 }
