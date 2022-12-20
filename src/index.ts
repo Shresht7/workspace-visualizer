@@ -7,24 +7,43 @@ import * as d3 from 'd3';
 const dom = new JSDOM();
 const body = dom.window.document.body;
 
+// NodeType
+const enum NodeType {
+    File = 'file',
+    Directory = 'directory',
+    SymbolicLink = 'symbolic-link',
+}
+
 // Node
 interface Node {
     name: string;
-    type: 'file' | 'directory' | 'symbolic-link';
+    type: NodeType;
     path: string;
     children: Node[];
 }
 
 // Accept path as an argument or use the current directory
+// TODO: Accept multiple arguments and create a tree for each under the root
 const path = process.argv[2] || process.cwd();
 
 /** The root node */
 const root: Node = {
     name: 'root',
-    type: 'directory',
+    type: NodeType.Directory,
     path: path,
     children: [],
 };
+
+/** Determine the node type */
+function determineNodeType(file: fs.Dirent): NodeType {
+    if (file.isFile()) {
+        return NodeType.File;
+    } else if (file.isDirectory()) {
+        return NodeType.Directory;
+    } else {
+        return NodeType.SymbolicLink;
+    }
+}
 
 /** Build the tree */
 function buildTree(node: Node): void {
@@ -40,7 +59,7 @@ function buildTree(node: Node): void {
         // Create the child node
         const child: Node = {
             name: file.name,
-            type: file.isFile() ? 'file' : file.isDirectory() ? 'directory' : 'symbolic-link',
+            type: determineNodeType(file),
             path: `${node.path}/${file.name}`,
             children: [],
         };
