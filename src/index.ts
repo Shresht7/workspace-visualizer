@@ -3,24 +3,11 @@ import * as fs from 'node:fs';
 import { JSDOM } from 'jsdom';
 import * as d3 from 'd3';
 
+import { Node, NodeType, determineNodeType } from './fs';
+
 // JSDOM
 const dom = new JSDOM();
 const body = dom.window.document.body;
-
-// NodeType
-const enum NodeType {
-    File = 'file',
-    Directory = 'directory',
-    SymbolicLink = 'symbolic-link',
-}
-
-// Node
-interface Node {
-    name: string;
-    type: NodeType;
-    path: string;
-    children: Node[];
-}
 
 // Accept path as an argument or use the current directory
 // TODO: Accept multiple arguments and create a tree for each under the root
@@ -33,17 +20,6 @@ const root: Node = {
     path: path,
     children: [],
 };
-
-/** Determine the node type */
-function determineNodeType(file: fs.Dirent): NodeType {
-    if (file.isFile()) {
-        return NodeType.File;
-    } else if (file.isDirectory()) {
-        return NodeType.Directory;
-    } else {
-        return NodeType.SymbolicLink;
-    }
-}
 
 /** Build the tree */
 function buildTree(node: Node): void {
