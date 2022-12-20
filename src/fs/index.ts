@@ -2,4 +2,4 @@
 // FILE-SYSTEM
 // -----------
 
-export * from './node'
+export * from './node.js'

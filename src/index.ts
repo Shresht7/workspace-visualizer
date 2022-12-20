@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import { JSDOM } from 'jsdom';
 import * as d3 from 'd3';
 
-import { Node, NodeType, determineNodeType } from './fs';
+import { Node } from './fs/index.js';
 
 // JSDOM
 const dom = new JSDOM();
@@ -13,45 +13,8 @@ const body = dom.window.document.body;
 // TODO: Accept multiple arguments and create a tree for each under the root
 const path = process.argv[2] || process.cwd();
 
-/** The root node */
-const root: Node = {
-    name: 'root',
-    type: NodeType.Directory,
-    path: path,
-    children: [],
-};
-
-/** Build the tree */
-function buildTree(node: Node): void {
-    // Read the directory
-    let files = fs.readdirSync(node.path, { withFileTypes: true });
-    for (const file of files) {
-
-        // Skip hidden files and node_modules
-        if (file.name.startsWith('.') || file.name === 'node_modules') {
-            continue;
-        }
-
-        // Create the child node
-        const child: Node = {
-            name: file.name,
-            type: determineNodeType(file),
-            path: `${node.path}/${file.name}`,
-            children: [],
-        };
-        // Add the child to the parent
-        node.children.push(child);
-
-        // Recursively build the tree
-        if (file.isDirectory()) {
-            buildTree(child);
-        }
-    }
-}
-
-// -------------
-buildTree(root);
-// -------------
+// Create root
+const root = Node.fromPath(path);
 
 // ==
 // D3
