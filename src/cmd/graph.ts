@@ -20,11 +20,7 @@ export const command: Command = {
 
         },
     ],
-    /** 
-     * Create a graph of your workspace
-     * @param {string} path The path to the JSON file to graph
-     * @param {string} output The output file path
-    */
+    /** Create a graph of your workspace */
     run: ({ path, output }: { path: string, output: string }) => {
         console.log('Creating graph...')
 
@@ -33,6 +29,8 @@ export const command: Command = {
 
         // Generate graph
         generateForceDirectedTreeGraph(root, output);
+
+        console.log('Graph created successfully! -- ' + output)
     }
 }
 

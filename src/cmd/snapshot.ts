@@ -32,6 +32,8 @@ const command: Command = {
 
         // Write to file
         writeFileSync(output, JSON.stringify(root, null, 4));
+
+        console.log('Snapshot created successfully! -- ' + output)
     }
 }
 
