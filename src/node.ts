@@ -1,5 +1,6 @@
 // Library
 import * as fs from 'node:fs';
+import ignore from 'ignore';
 
 // NodeType
 export enum NodeType {
@@ -61,32 +62,48 @@ export class Node {
 
     /** Build the tree */
     buildTree(): void {
-        // Read the directory
-        let files = fs.readdirSync(this.path);
-        for (const file of files) {
 
-            // Skip hidden files and node_modules
-            if (this._ignoreEntry(file)) {
-                continue;
-            }
+        const ignoreFilter = this.getIgnoreFilter(this.path);
+
+        // Read the directory
+        let files = fs.readdirSync(this.path).filter(ignoreFilter);
+        for (const file of files) {
+            console.log(file)
 
             // Create the child node
             const child = new Node(`${this.path}/${file}`);
-
-            // Add the child to the parent
-            this.children.push(child);
 
             // Recursively build the tree
             if (child.type === NodeType.Directory) {
                 child.buildTree();
             }
+
+            // Add the child to the parent
+            this.children.push(child);
         }
 
     }
 
-    /** Ignore an entry */
-    private _ignoreEntry(entry: string): boolean {
-        return entry.startsWith('.') || entry === 'node_modules';
+    /**
+     * Get the ignore filter
+     * @param {string} entry The entry path
+     * @param {string[]} ignoreFiles The ignore files
+     * @param {string[]} ignoreRules The ignore rules
+     * @returns {Function} The ignore filter
+     */
+    private getIgnoreFilter(
+        entry: string,
+        ignoreFiles: string[] = ['.gitignore', '.ignore'],
+        ignoreRules: string[] = ['.git']
+    ): (name: string) => boolean {
+        const IGNORE = ignore().add(ignoreRules);
+        for (const ignoreFile of ignoreFiles) {
+            const ignorePath = `${entry}/${ignoreFile}`;
+            if (fs.existsSync(ignorePath)) {
+                const contents = fs.readFileSync(ignorePath, 'utf-8')
+                IGNORE.add(contents);
+            }
+        }
+        return IGNORE.createFilter();
     }
-
 }

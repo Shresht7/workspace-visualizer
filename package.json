@@ -21,6 +21,7 @@
   "dependencies": {
     "commander": "^9.4.1",
     "d3": "^7.7.0",
+    "ignore": "^5.2.4",
     "jsdom": "^20.0.3"
   }
 }
