@@ -2,7 +2,10 @@
 import { writeFileSync } from "node:fs";
 import { Node } from "../node.js";
 
-const command: Command = {
+// Type Definitions
+type snapshot = (options: { path: string, output: string }) => void;
+
+const command: Command<snapshot> = {
     name: "snapshot",
     description: "Create a snapshot of your workspace",
     args: [
@@ -21,10 +24,8 @@ const command: Command = {
     ],
     /**
      * Create a snapshot of your workspace
-     * @param {string} path The path to the workspace
-     * @param {string} output The output file path
      */
-    run: ({ path, output }: { path: string, output: string }) => {
+    run: ({ path, output }) => {
         console.log('Creating snapshot...')
 
         // Create root
@@ -37,4 +38,6 @@ const command: Command = {
     }
 }
 
+// --------------------
 export default command;
+// --------------------

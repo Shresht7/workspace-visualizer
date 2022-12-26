@@ -1,9 +1,9 @@
-interface Command {
+interface Command<T extends Function> {
     name: string;
     description: string;
     args: Argument[];
     options: Option[];
-    run: (...args: any[]) => void;
+    run: T;
 }
 
 interface Argument {
