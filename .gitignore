@@ -129,5 +129,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Node Modules
+node_modules/
+
+# Build output
 build
-node_modules
