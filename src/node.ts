@@ -1,5 +1,6 @@
 // Library
 import * as fs from 'node:fs';
+import * as path from 'node:path';
 import ignore from 'ignore';
 
 // NodeType
@@ -45,21 +46,25 @@ export class Node {
     children: Node[];
 
     /** Create a new node from a path */
-    static fromPath(path: string): Node {
-        const node = new Node(path);
+    static fromPath(p: string): Node {
+        // Create the node
+        const node = new Node(p);
+        // Build the tree
         node.buildTree();
         return node;
     }
 
     /** Create a new node */
-    constructor(path: string) {
+    constructor(p: string) {
+        // Resolve the path
+        this.path = fs.realpathSync(p)
+
         // Get file stats
-        const stats = fs.statSync(path);
+        const stats = fs.statSync(this.path);
 
         // Set properties
-        this.name = path.split('/').pop() || '';
+        this.name = path.basename(this.path);
         this.type = determineNodeType(stats) || NodeType.File;
-        this.path = path;
         this.createdAt = stats.birthtimeMs;
         this.accessedAt = stats.atimeMs;
         this.modifiedAt = stats.mtimeMs;
@@ -77,7 +82,8 @@ export class Node {
             console.log(file)
 
             // Create the child node
-            const child = new Node(`${this.path}/${file}`);
+            const childPath = path.join(this.path, file);
+            const child = new Node(childPath);
 
             // Recursively build the tree
             if (child.type === NodeType.Directory) {
