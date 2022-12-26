@@ -9,14 +9,20 @@ export enum NodeType {
     SymbolicLink = 'symbolic-link',
 }
 
-/** Determine the node type */
-export function determineNodeType(file: fs.Dirent | fs.Stats): NodeType {
+/**
+ * Determine the node type. Returns undefined if the node type is unknown.
+ * @param {fs.Dirent | fs.Stats} file The file
+ * @returns {NodeType | undefined} The node type
+ */
+export function determineNodeType(file: fs.Dirent | fs.Stats): NodeType | undefined {
     if (file.isFile()) {
         return NodeType.File;
     } else if (file.isDirectory()) {
         return NodeType.Directory;
-    } else {
+    } else if (file.isSymbolicLink()) {
         return NodeType.SymbolicLink;
+    } else {
+        return undefined;
     }
 }
 
@@ -52,7 +58,7 @@ export class Node {
 
         // Set properties
         this.name = path.split('/').pop() || '';
-        this.type = determineNodeType(stats);
+        this.type = determineNodeType(stats) || NodeType.File;
         this.path = path;
         this.createdAt = stats.birthtimeMs;
         this.accessedAt = stats.atimeMs;
