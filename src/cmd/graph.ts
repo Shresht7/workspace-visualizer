@@ -7,7 +7,7 @@ type graph = (options: { path: string, output: string }) => void;
 
 export const command: Command<graph> = {
     name: "graph",
-    description: "Create a graph of your workspace",
+    description: "Visualize your workspace tree as a graph",
     args: [
     ],
     options: [
@@ -19,22 +19,19 @@ export const command: Command<graph> = {
         {
             name: "-o, --output [output]",
             description: "The output file path",
-            default: "./graph.html"
+            default: "./workspace-graph.svg"
 
         },
     ],
     /** Create a graph of your workspace */
     run: ({ path, output }) => {
         console.log('Creating graph...')
-
-        // Read file
         const root = JSON.parse(readFileSync(path, 'utf-8'));
-
-        // Generate graph
         generateForceDirectedTreeGraph(root, output);
-
         console.log('Graph created successfully! -- ' + output)
     }
 }
 
+// -------------------
 export default command
+// -------------------

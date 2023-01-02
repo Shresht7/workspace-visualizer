@@ -27,13 +27,8 @@ const command: Command<snapshot> = {
      */
     run: ({ path, output }) => {
         console.log('Creating snapshot...')
-
-        // Create root
         const root = Node.fromPath(path);
-
-        // Write to file
         writeFileSync(output, JSON.stringify(root, null, 4));
-
         console.log('Snapshot created successfully! -- ' + output)
     }
 }

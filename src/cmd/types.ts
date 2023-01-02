@@ -1,3 +1,7 @@
+// ================
+// TYPE DEFINITIONS
+// ================
+
 interface Command<T extends Function> {
     name: string;
     description: string;
