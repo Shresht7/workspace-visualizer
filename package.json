@@ -1,7 +1,7 @@
 {
   "name": "workspace-visualizer",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A simple tool to record and visualize a file-system workspace",
   "main": "index.js",
   "type": "module",
   "scripts": {
