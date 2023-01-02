@@ -1,18 +1,16 @@
+#! /usr/bin/env node
+
 // Library
 import { Command } from 'commander';
-import { readFileSync } from 'node:fs';
 import { commands } from './commands/index.js';
 
 // Instantiate program
 const program = new Command();
 
-// Read package.json
-const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'));
-
 program
-    .name(pkg.name)
-    .description(pkg.description)
-    .version(pkg.version, '-v, --version', 'Output the current version');
+    .name('workspace-visualizer')
+    .description('A simple tool to record and visualize your workspace')
+    .version('0.1.0', '-v, --version', 'Output the current version');
 
 // Add commands
 commands.forEach(cmd => {
