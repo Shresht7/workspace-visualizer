@@ -3,7 +3,12 @@ import { writeFileSync } from "node:fs";
 import { Node } from "../node.js";
 
 // Type Definitions
-type snapshot = (options: { path: string, output: string }) => void;
+type snapshotOptions = {
+    path: string,
+    output: string,
+    prettyPrint: boolean
+}
+type snapshot = (options: snapshotOptions) => void;
 
 const command: Command<snapshot> = {
     name: "snapshot",
@@ -20,15 +25,24 @@ const command: Command<snapshot> = {
             name: "-o, --output [output]",
             description: "The output file path",
             default: "./tree.json"
+        },
+        {
+            name: "--pretty-print",
+            description: "Pretty print the JSON output",
+            default: false
         }
     ],
     /**
      * Create a snapshot of your workspace
      */
-    run: ({ path, output }) => {
+    run: ({ path, output, prettyPrint }) => {
         console.log('Creating snapshot...')
         const root = Node.fromPath(path);
-        writeFileSync(output, JSON.stringify(root, null, 4));
+        writeFileSync(output, JSON.stringify(
+            root,
+            null,
+            prettyPrint ? 4 : 0
+        ));
         console.log('Snapshot created successfully! -- ' + output)
     }
 }
