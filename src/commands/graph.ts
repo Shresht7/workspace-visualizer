@@ -14,12 +14,12 @@ export const command: Command<graph> = {
         {
             name: "-p, --path [path]",
             description: "The path to the JSON file to graph",
-            default: "./tree.json"
+            default: "./workspace.json"
         },
         {
             name: "-o, --output [output]",
             description: "The output file path",
-            default: "./workspace-graph.svg"
+            default: "./workspace.svg"
 
         },
     ],

@@ -24,7 +24,7 @@ const command: Command<snapshot> = {
         {
             name: "-o, --output [output]",
             description: "The output file path",
-            default: "./tree.json"
+            default: "./workspace.json"
         },
         {
             name: "--pretty-print",
