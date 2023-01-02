@@ -34,3 +34,8 @@ commands.forEach(cmd => {
 
 // Parse arguments
 program.parse()
+
+// Output help if no arguments are provided
+if (!process.argv.slice(2).length) {
+    program.outputHelp();
+}
