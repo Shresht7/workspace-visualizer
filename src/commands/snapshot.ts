@@ -1,6 +1,6 @@
 // Library
 import { writeFileSync } from "node:fs";
-import { Node } from "../node.js";
+import { Node } from "../class/Node.js";
 
 // Type Definitions
 type snapshotOptions = {

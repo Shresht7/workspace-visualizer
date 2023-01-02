@@ -1,7 +1,7 @@
 // Library
 import { Command } from 'commander';
 import { readFileSync } from 'node:fs';
-import { commands } from './cmd/index.js';
+import { commands } from './commands/index.js';
 
 // Instantiate program
 const program = new Command();

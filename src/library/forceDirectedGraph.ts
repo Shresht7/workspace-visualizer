@@ -2,7 +2,7 @@
 import * as d3 from 'd3';
 import { JSDOM } from 'jsdom';
 import * as fs from 'node:fs';
-import { Node } from './node.js';
+import { Node } from '../class/Node.js';
 
 // Constants
 const width = 400;

@@ -1,6 +1,6 @@
 // Library
 import { readFileSync } from "node:fs";
-import { generateForceDirectedTreeGraph } from "../forceDirectedGraph.js";
+import { generateForceDirectedTreeGraph } from "../library/forceDirectedGraph.js";
 
 // Type Definitions
 type graph = (options: { path: string, output: string }) => void;
