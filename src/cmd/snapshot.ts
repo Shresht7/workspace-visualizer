@@ -37,12 +37,15 @@ const command: Command<snapshot> = {
      */
     run: ({ path, output, prettyPrint }) => {
         console.log('Creating snapshot...')
-        const root = Node.fromPath(path);
+
+        const root = new Node(path);
+        root.buildTree();
         writeFileSync(output, JSON.stringify(
             root,
             null,
             prettyPrint ? 4 : 0
         ));
+
         console.log('Snapshot created successfully! -- ' + output)
     }
 }

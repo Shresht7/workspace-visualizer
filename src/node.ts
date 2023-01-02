@@ -7,7 +7,7 @@ import ignore, { Ignore } from 'ignore';
 // NODE TYPE
 // ---------
 
-// NodeType
+/** The type of the node. Can be a `file`, `directory` or a `symbolic-link` */
 export enum NodeType {
     File = 'file',
     Directory = 'directory',
@@ -15,7 +15,9 @@ export enum NodeType {
 }
 
 /**
- * Determine the node type. Returns undefined if the node type is unknown.
+ * Determine the node type.
+ * The node can be a `file`, `directory` or a `symbolic-link`.
+ * Returns `undefined` if the node type is unknown.
  * @param {fs.Dirent | fs.Stats} file The file
  * @returns {NodeType | undefined} The node type
  */
@@ -35,7 +37,12 @@ export function determineNodeType(file: fs.Dirent | fs.Stats): NodeType | undefi
 // NODE
 // ----
 
-// Node
+/**
+ * A node in the workspace tree.
+ * Contains information about the node and its children.
+ * A node can be a `file`, `directory` or a `symbolic-link`.
+ * A node can have other nodes as children.
+*/
 export class Node {
 
     /** The node name */
@@ -52,13 +59,6 @@ export class Node {
     modifiedAt: number;
     /** The node children */
     children: Node[];
-
-    /** Create a new node from a path */
-    static fromPath(p: string): Node {
-        const node = new Node(p);
-        node.buildTree();
-        return node;
-    }
 
     /** Create a new node */
     constructor(p: string) {
