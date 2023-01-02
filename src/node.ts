@@ -1,7 +1,11 @@
 // Library
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import ignore from 'ignore';
+import ignore, { Ignore } from 'ignore';
+
+// ---------
+// NODE TYPE
+// ---------
 
 // NodeType
 export enum NodeType {
@@ -27,6 +31,10 @@ export function determineNodeType(file: fs.Dirent | fs.Stats): NodeType | undefi
     }
 }
 
+// ----
+// NODE
+// ----
+
 // Node
 export class Node {
 
@@ -47,9 +55,7 @@ export class Node {
 
     /** Create a new node from a path */
     static fromPath(p: string): Node {
-        // Create the node
         const node = new Node(p);
-        // Build the tree
         node.buildTree();
         return node;
     }
@@ -71,51 +77,55 @@ export class Node {
         this.children = [];
     }
 
-    /** Build the tree */
-    buildTree(): void {
+    /** The ignore instance. */
+    #ignore: Ignore = ignore();
 
-        const ignoreFilter = getIgnoreFilter(this.path);
-
-        // Read the directory
-        let files = fs.readdirSync(this.path).filter(ignoreFilter);
-        for (const file of files) {
-            console.log(file)
-
-            // Create the child node
-            const childPath = path.join(this.path, file);
-            const child = new Node(childPath);
-
-            // Recursively build the tree
-            if (child.type === NodeType.Directory) {
-                child.buildTree();
-            }
-
-            // Add the child to the parent
-            this.children.push(child);
-        }
-
-    }
-}
-
-/**
- * Get the ignore filter
+    /**
+ * Get the ignore filter. Determines the ignore files and rules.
  * @param {string} entry The entry path
  * @param {string[]} ignoreFiles The ignore files
  * @param {string[]} ignoreRules The ignore rules
  * @returns {Function} The ignore filter
  */
-function getIgnoreFilter(
-    entry: string,
-    ignoreFiles: string[] = ['.gitignore', '.ignore'],
-    ignoreRules: string[] = ['.git']
-): (name: string) => boolean {
-    const IGNORE = ignore().add(ignoreRules);
-    for (const ignoreFile of ignoreFiles) {
-        const ignorePath = `${entry}/${ignoreFile}`;
-        if (fs.existsSync(ignorePath)) {
-            const contents = fs.readFileSync(ignorePath, 'utf-8')
-            IGNORE.add(contents);
+    private _getIgnoreFilter(
+        entry: string,
+        ignoreFiles: string[] = ['.gitignore', '.ignore'],
+        ignoreRules: string[] = ['.git']
+    ): (name: string) => boolean {
+        this.#ignore.add(ignoreRules);
+        for (const ignoreFile of ignoreFiles) {
+            const ignorePath = path.join(entry, ignoreFile);
+            if (fs.existsSync(ignorePath)) {
+                const contents = fs.readFileSync(ignorePath, 'utf-8').replace(/\/$/gm, "");
+                this.#ignore.add(contents);
+            }
         }
+        return this.#ignore.createFilter();
     }
-    return IGNORE.createFilter();
+
+    /** Build the tree */
+    buildTree(): void {
+
+        // Get the ignore filter
+        const ignoreFilter = this._getIgnoreFilter(this.path);
+
+        // Read the directory
+        let entries = fs.readdirSync(this.path)
+        entries = entries.filter(ignoreFilter);
+
+        for (const entry of entries) {
+            // Create the child node
+            const childPath = path.join(this.path, entry);
+            const child = new Node(childPath);
+
+            // Build the child tree
+            if (child.type === NodeType.Directory) {
+                child.buildTree();
+            }
+
+            // Add the child to the children
+            this.children.push(child);
+        }
+
+    }
 }
