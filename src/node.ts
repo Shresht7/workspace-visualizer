@@ -1,7 +1,7 @@
 // Library
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import ignore, { Ignore } from 'ignore';
+import ignore from 'ignore';
 
 // ---------
 // NODE TYPE
@@ -60,6 +60,11 @@ export class Node {
     /** The node children */
     children: Node[];
 
+    /** Ignore rules */
+    #ignoreRules: string[] = ['.git'];
+    /** Ignore files */
+    #ignoreFiles: string[] = ['.gitignore', '.ignore'];
+
     /** Create a new node */
     constructor(p: string) {
         // Resolve the path
@@ -75,32 +80,6 @@ export class Node {
         this.accessedAt = stats.atimeMs;
         this.modifiedAt = stats.mtimeMs;
         this.children = [];
-    }
-
-    /** The ignore instance. */
-    #ignore: Ignore = ignore();
-
-    /**
- * Get the ignore filter. Determines the ignore files and rules.
- * @param {string} entry The entry path
- * @param {string[]} ignoreFiles The ignore files
- * @param {string[]} ignoreRules The ignore rules
- * @returns {Function} The ignore filter
- */
-    private _getIgnoreFilter(
-        entry: string,
-        ignoreFiles: string[] = ['.gitignore', '.ignore'],
-        ignoreRules: string[] = ['.git']
-    ): (name: string) => boolean {
-        this.#ignore.add(ignoreRules);
-        for (const ignoreFile of ignoreFiles) {
-            const ignorePath = path.join(entry, ignoreFile);
-            if (fs.existsSync(ignorePath)) {
-                const contents = fs.readFileSync(ignorePath, 'utf-8').replace(/\/$/gm, "");
-                this.#ignore.add(contents);
-            }
-        }
-        return this.#ignore.createFilter();
     }
 
     /** Build the tree */
@@ -128,4 +107,32 @@ export class Node {
         }
 
     }
+
+    /**
+     * Get the ignore filter. Determines which files and directories should be ignored.
+     * @param {string} entry The entry path
+     * @returns {Function} The ignore filter
+     */
+    private _getIgnoreFilter(entry: string): ((name: string) => boolean) {
+
+        // Instantiate the ignore manager
+        const _ignore = ignore();
+
+        // Add the ignore rules
+        _ignore.add(this.#ignoreRules);
+
+        // Add the ignore rules from the ignore files
+        for (const ignoreFile of this.#ignoreFiles) {
+            const ignoreFilePath = path.join(entry, ignoreFile);
+            if (fs.existsSync(ignoreFilePath)) {
+                // Read the ignore file (and remove the trailing slash as they were causing issues)
+                const contents = fs.readFileSync(ignoreFilePath, 'utf-8').replace(/\/$/gm, "");
+                _ignore.add(contents);
+            }
+        }
+
+        // Return the ignore filter
+        return _ignore.createFilter();
+    }
+
 }
