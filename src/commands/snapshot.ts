@@ -1,19 +1,15 @@
 // Library
 import { writeFileSync } from "node:fs";
-import { Node } from "../class/Node.js";
+import { snapshot, options } from "../library/snapshot.js";
 
 // Type Definitions
-type snapshotOptions = {
-    path: string,
+interface snapshotOptions extends options {
     output: string,
-    ignore: string[],
-    include: string[],
-    exclude: string[],
     prettyPrint: boolean
 }
-type snapshot = (options: snapshotOptions) => void;
+type Snapshot = (options: snapshotOptions) => void;
 
-const command: Command<snapshot> = {
+const command: Command<Snapshot> = {
     name: "snapshot",
     description: "Create a snapshot of your workspace",
     args: [
@@ -50,39 +46,22 @@ const command: Command<snapshot> = {
             default: false
         }
     ],
-    /**
-     * Create a snapshot of your workspace
-     */
-    run: ({
-        path,
-        output,
-        ignore,
-        include,
-        exclude,
-        prettyPrint
-    }) => {
+    /** Create a snapshot of your workspace */
+    run: (options: snapshotOptions) => {
         console.log('Creating snapshot...')
 
-        // Create the root node
-        const root = new Node(path);
-
-        // Add the rules of selection
-        ignore.forEach((pattern) => root.addIgnoreRule(pattern));
-        include.forEach((pattern) => root.addIncludeRule(pattern));
-        exclude.forEach((pattern) => root.addExcludeRule(pattern));
-
-        // Build the tree
-        root.buildTree();
+        // Create the snapshot
+        const root = snapshot(options)
 
         // Write the snapshot to the output file
-        writeFileSync(output, JSON.stringify(
+        writeFileSync(options.output, JSON.stringify(
             root,
             null,
-            prettyPrint ? 4 : 0
+            options.prettyPrint ? 4 : 0
         ));
 
-        console.log('Snapshot created successfully! -- ' + output)
-    }
+        console.log('Snapshot created successfully! -- ' + options.output)
+    },
 }
 
 // --------------------
