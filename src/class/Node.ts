@@ -65,7 +65,9 @@ export class Node {
     /** Ignore files */
     #ignoreFiles: string[] = ['.gitignore', '.ignore'];
 
+    /** Include rules */
     #include: string[] = [];
+    /** Exclude rules */
     #exclude: string[] = [];
 
     /** Create a new node */
