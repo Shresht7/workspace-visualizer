@@ -22,10 +22,6 @@ interface options {
     width: number,
     /** Height of the SVG output */
     height: number,
-    /** Margin to leave on the left of the SVG */
-    marginLeft: number,
-    /** Margin to leave on the top of the SVG */
-    marginTop: number,
 
     // Radial Tree Options
     // -------------------
@@ -79,8 +75,6 @@ const defaultOptions: options = {
     // SVG Options
     width: 2400,
     height: 2400,
-    marginLeft: 0,
-    marginTop: 0,
 
     // Radial Tree Options
     angle: 2 * Math.PI, // 360 degrees sweep
@@ -127,7 +121,7 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
     const svg = d3.select(body).append("svg")
         .attr("width", options.width / 2)
         .attr("height", options.height / 2)
-        .attr("viewBox", [-options.marginLeft - options.radius, -options.marginTop - options.radius, options.width, options.height]);
+        .attr("viewBox", [-options.radius, -options.radius, options.width, options.height]);
 
     // Create tree
     const tree = d3.tree<Node>()
@@ -172,6 +166,10 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
     node.append("circle")
         .attr("fill", options.fill)
         .attr("r", options.r);
+
+    // Add title to the nodes
+    node.append('title')
+        .text(d => d.data.name);
 
     // Add node text
     node.append("text")
