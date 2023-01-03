@@ -2,4 +2,4 @@
 //  HELPERS
 //  =======
 
-export * from './determineExtensionColor.js';
+export * from './getExtensionColor.js';

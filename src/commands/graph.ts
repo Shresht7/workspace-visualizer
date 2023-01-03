@@ -5,7 +5,7 @@ import { snapshot } from "../library/snapshot.js";
 import { generateForceDirectedTreeGraph } from "../library/forceDirectedGraph.js";
 
 // Helpers
-import { determineExtensionColor } from '../helpers/index.js'; // Assigns colors to file extensions
+import { getExtensionColor } from '../helpers/index.js'; // Assigns colors to file extensions
 
 // Type Definitions
 import type { Node } from "../class/Node.js";
@@ -51,9 +51,9 @@ const command: Command<Graph> = {
             width: 400,
             height: 400,
             // Set the fill color of the nodes based on the file extension
-            fill: (d) => determineExtensionColor(d.data.path),
+            fill: (d) => getExtensionColor(d.data.path),
             // Set the stroke color of the links based on the file extension
-            stroke: (d) => determineExtensionColor(d.target.data.path),
+            stroke: (d) => getExtensionColor(d.target.data.path),
         });
 
         // Write the SVG to the output file

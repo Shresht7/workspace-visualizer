@@ -11,7 +11,7 @@ import extensionColors from "./colorAssociation.json"; // This is a JSON file wi
  * const color = determineExtensionColor("C:\\Users\\User\\Desktop\\file.js")
  * console.log(color) // #f7df1e
  */
-export function determineExtensionColor(path: string, fallbackColor: string = "#000000"): string {
+export function getExtensionColor(path: string, fallbackColor: string = "#000000"): string {
     // Get the extension of the file
     const extension = extname(path).toLowerCase();
     // Check if the extension is in the JSON file
@@ -23,3 +23,5 @@ export function determineExtensionColor(path: string, fallbackColor: string = "#
         return fallbackColor;
     }
 }
+
+// TODO: Extract this to a separate npm package
