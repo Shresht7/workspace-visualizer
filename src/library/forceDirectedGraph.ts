@@ -118,12 +118,8 @@ export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<o
     // Merge options with defaults
     const options = { ...defaultOptions, ...opts } as options;
 
-    // JSDOM
-    const dom = new JSDOM();
-    const body = dom.window.document.body;
-
     // Create SVG
-    const svg = d3.select(body).append('svg')
+    const svg = d3.select(document.body).append('svg')
         .attr('width', options.width)
         .attr('height', options.height)
         .attr('viewBox', [-options.width / 2, -options.height / 2, options.width, options.height]);

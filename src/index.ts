@@ -2,7 +2,12 @@
 
 // Library
 import { Command } from 'commander'; // CLI framework
+import { JSDOM } from 'jsdom'; // DOM parser
 import { commands } from './commands/index.js'; // All commands
+
+// Instantiate JSDOM
+const dom = new JSDOM();
+globalThis.document = dom.window.document;
 
 // Instantiate program
 const program = new Command();

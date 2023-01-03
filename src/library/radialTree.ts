@@ -1,6 +1,5 @@
 // Library
 import * as d3 from 'd3'; // Data-Visualization Library
-import { JSDOM } from 'jsdom'; // DOM Manipulation outside of the browser
 
 // Type Definitions
 import type { Node } from '../class/Node.js';
@@ -113,12 +112,8 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
     // merge options with defaults
     const options = { ...defaultOptions, ...opts } as options;
 
-    // JSDOM
-    const dom = new JSDOM();
-    const body = dom.window.document.body;
-
     // Create SVG
-    const svg = d3.select(body).append("svg")
+    const svg = d3.select(document.body).append("svg")
         .attr("width", options.width / 2)
         .attr("height", options.height / 2)
         .attr("viewBox", [-options.radius, -options.radius, options.width, options.height]);
