@@ -37,7 +37,7 @@ const command: Command<Snapshot> = {
             default: ['.git']
         },
         {
-            name: "-i, --include [include...]",
+            name: "-n, --include [include...]",
             description: "Include files matching the pattern",
             default: []
         },
