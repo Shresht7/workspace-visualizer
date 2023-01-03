@@ -65,6 +65,9 @@ export class Node {
     /** Ignore files */
     #ignoreFiles: string[] = ['.gitignore', '.ignore'];
 
+    #include: string[] = [];
+    #exclude: string[] = [];
+
     /** Create a new node */
     constructor(p: string) {
         // Resolve the path
@@ -109,6 +112,46 @@ export class Node {
     }
 
     /**
+     * Add an ignore rule.
+     * @param {string} rule The ignore rule
+     * @returns {void}
+     * @example
+     * node.addIgnoreRule('node_modules');
+     * @example
+     * node.addIgnoreRule('*.log');
+     */
+    addIgnoreRule(rule: string): void {
+        this.#ignoreRules.push(rule);
+    }
+
+    /**
+     * Add an include rule.
+     * @param {string} rule The include rule
+     * @returns {void}
+     * @example
+     * node.addIncludeRule('*.js');
+     * @example
+     * node.addIncludeRule('*.ts');
+     */
+    addIncludeRule(rule: string): void {
+        // The ! is required to negate the rule
+        this.#include.push(`!${rule}`);
+    }
+
+    /**
+     * Add an exclude rule.
+     * @param {string} rule The exclude rule
+     * @returns {void}
+     * @example
+     * node.addExcludeRule('*.js');
+     * @example
+     * node.addExcludeRule('*.ts');
+     */
+    addExcludeRule(rule: string): void {
+        this.#exclude.push(rule);
+    }
+
+    /**
      * Get the ignore filter. Determines which files and directories should be ignored.
      * @param {string} entry The entry path
      * @returns {Function} The ignore filter
@@ -120,6 +163,12 @@ export class Node {
 
         // Add the ignore rules
         _ignore.add(this.#ignoreRules);
+
+        // Add the exclude rules
+        _ignore.add(this.#exclude);
+
+        // Add the include rules
+        _ignore.add(this.#include);
 
         // Add the ignore rules from the ignore files
         for (const ignoreFile of this.#ignoreFiles) {

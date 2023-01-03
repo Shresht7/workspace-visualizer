@@ -6,6 +6,9 @@ import { Node } from "../class/Node.js";
 type snapshotOptions = {
     path: string,
     output: string,
+    ignore: string[],
+    include: string[],
+    exclude: string[],
     prettyPrint: boolean
 }
 type snapshot = (options: snapshotOptions) => void;
@@ -27,6 +30,21 @@ const command: Command<snapshot> = {
             default: "./workspace.json"
         },
         {
+            name: "-i, --ignore [ignore...]",
+            description: "Ignore files matching the pattern",
+            default: ['.git']
+        },
+        {
+            name: "-i, --include [include...]",
+            description: "Include files matching the pattern",
+            default: []
+        },
+        {
+            name: "-e, --exclude [exclude...]",
+            description: "Exclude files matching the pattern",
+            default: []
+        },
+        {
             name: "--pretty-print",
             description: "Pretty print the JSON output",
             default: false
@@ -35,11 +53,28 @@ const command: Command<snapshot> = {
     /**
      * Create a snapshot of your workspace
      */
-    run: ({ path, output, prettyPrint }) => {
+    run: ({
+        path,
+        output,
+        ignore,
+        include,
+        exclude,
+        prettyPrint
+    }) => {
         console.log('Creating snapshot...')
 
+        // Create the root node
         const root = new Node(path);
+
+        // Add the rules of selection
+        ignore.forEach((pattern) => root.addIgnoreRule(pattern));
+        include.forEach((pattern) => root.addIncludeRule(pattern));
+        exclude.forEach((pattern) => root.addExcludeRule(pattern));
+
+        // Build the tree
         root.buildTree();
+
+        // Write the snapshot to the output file
         writeFileSync(output, JSON.stringify(
             root,
             null,
