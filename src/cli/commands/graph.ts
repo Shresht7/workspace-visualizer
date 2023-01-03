@@ -1,24 +1,24 @@
-//  Library
+// Library
 import { readFileSync, writeFileSync } from "node:fs";
 import { extname } from "node:path";
-import { snapshot } from "../library/snapshot.js";
-import { generateRadialTree } from "../library/radialTree.js";
+import { snapshot } from "../../library/snapshot.js";
+import { generateForceDirectedTreeGraph } from "../../library/forceDirectedGraph.js";
 
 // Helpers
-import { getExtensionColor } from '../helpers/index.js'; // Assigns colors to file extensions
+import { getExtensionColor } from '../../helpers/index.js'; // Assigns colors to file extensions
 
 // Type Definitions
-import type { Node } from "../class/Node.js";
+import type { Node } from "../../class/Node.js";
 
-interface radialOptions {
+interface graphOptions {
     path: string,
     output: string,
 }
-type Radial = (options: radialOptions) => void;
+type Graph = (options: graphOptions) => void;
 
-const command: Command<Radial> = {
-    name: "radial",
-    description: "Visualize the workspace tree as a radial tree graph",
+const command: Command<Graph> = {
+    name: "graph",
+    description: "Visualize the workspace tree as a graph",
     args: [
     ],
     options: [
@@ -28,7 +28,6 @@ const command: Command<Radial> = {
             default: process.cwd()
         },
         {
-
             name: "-o, --output [output]",
             description: "The output file path",
             default: "./workspace.svg"
@@ -39,6 +38,7 @@ const command: Command<Radial> = {
     run: async ({ path, output }) => {
         console.log('Creating graph...')
 
+
         let root: Node
         if (extname(path) === '.json') {
             root = JSON.parse(readFileSync(path, 'utf-8'));
@@ -47,7 +47,9 @@ const command: Command<Radial> = {
         }
 
         // Generate the graph
-        const svg = await generateRadialTree(root, {
+        const svg = await generateForceDirectedTreeGraph(root, {
+            width: 400,
+            height: 400,
             // Set the fill color of the nodes based on the file extension
             fill: (d) => getExtensionColor(d.data.path),
             // Set the stroke color of the links based on the file extension
