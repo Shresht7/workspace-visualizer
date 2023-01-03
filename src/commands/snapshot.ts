@@ -34,7 +34,7 @@ const command: Command<Snapshot> = {
         {
             name: "-i, --ignore [ignore...]",
             description: "Ignore files matching the pattern",
-            default: ['.git']
+            default: []
         },
         {
             name: "-n, --include [include...]",
