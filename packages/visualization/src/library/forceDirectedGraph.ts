@@ -1,9 +1,8 @@
 // Library
 import * as d3 from 'd3'; // Data-Visualization Library
-import { JSDOM } from 'jsdom'; // DOM Manipulation outside of the browser
 
 // Type Definitions
-import type { Node } from '../class/Node.js';
+import type { Node } from '@workspace-visualizer/snapshot';
 
 // ----------------
 // TYPE DEFINITIONS

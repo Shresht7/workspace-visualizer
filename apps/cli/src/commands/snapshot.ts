@@ -1,6 +1,6 @@
 // Library
 import { writeFileSync } from "node:fs";
-import { snapshot, options } from "../../library/snapshot.js";
+import { snapshot, options } from "@workspace-visualizer/snapshot";
 
 // Type Definitions
 interface snapshotOptions extends options {

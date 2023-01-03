@@ -1,5 +1,5 @@
 // Library
-import { Node } from "../class/Node.js";
+import { Node } from "./class/Node.js";
 
 // Type Definitions
 export interface options {

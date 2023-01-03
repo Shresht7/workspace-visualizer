@@ -1,0 +1,20 @@
+{
+  "name": "@workspace-visualizer/snapshot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "npx rimraf build node_modules"
+  },
+  "keywords": [],
+  "author": "Shresht7",
+  "license": "MIT",
+  "dependencies": {
+    "ignore": "^5.2.4"
+  }
+}

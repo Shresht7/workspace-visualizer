@@ -1,0 +1,24 @@
+{
+  "name": "@workspace-visualizer/visualization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "clean": "npx rimraf build node_modules"
+  },
+  "keywords": [],
+  "author": "Shresht7",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/d3": "^7.4.0"
+  },
+  "dependencies": {
+    "d3": "^7.7.0",
+    "@workspace-visualizer/snapshot": "1.0.0"
+  }
+}
