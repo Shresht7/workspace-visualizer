@@ -4,6 +4,9 @@ import { extname } from "node:path";
 import { snapshot } from "../library/snapshot.js";
 import { generateRadialTree } from "../library/radialTree.js";
 
+// Helpers
+import { determineExtensionColor } from '../helpers/index.js'; // Assigns colors to file extensions
+
 // Type Definitions
 import type { Node } from "../class/Node.js";
 
@@ -44,7 +47,12 @@ const command: Command<Radial> = {
         }
 
         // Generate the graph
-        const svg = await generateRadialTree(root);
+        const svg = await generateRadialTree(root, {
+            // Set the fill color of the nodes based on the file extension
+            fill: (d) => determineExtensionColor(d.data.path),
+            // Set the stroke color of the links based on the file extension
+            stroke: (d) => determineExtensionColor(d.target.data.path),
+        });
 
         // Write the SVG to the output file
         if (svg) {
