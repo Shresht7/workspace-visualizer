@@ -1,8 +1,12 @@
 // Library
 import { readFileSync, writeFileSync } from "node:fs";
+import { extname } from "node:path";
+import { snapshot } from "../library/snapshot.js";
 import { generateForceDirectedTreeGraph } from "../library/forceDirectedGraph.js";
 
 // Type Definitions
+import type { Node } from "../class/Node.js";
+
 interface graphOptions {
     path: string,
     output: string,
@@ -11,14 +15,14 @@ type Graph = (options: graphOptions) => void;
 
 const command: Command<Graph> = {
     name: "graph",
-    description: "Visualize your workspace tree as a graph",
+    description: "Visualize the workspace tree as a graph",
     args: [
     ],
     options: [
         {
             name: "-p, --path [path]",
-            description: "The path to the JSON file to graph",
-            default: "./workspace.json"
+            description: "The path to the workspace to graph",
+            default: process.cwd()
         },
         {
             name: "-o, --output [output]",
@@ -31,8 +35,13 @@ const command: Command<Graph> = {
     run: async ({ path, output }) => {
         console.log('Creating graph...')
 
-        // Read the JSON file
-        const root = JSON.parse(readFileSync(path, 'utf-8'));
+
+        let root: Node
+        if (extname(path) === '.json') {
+            root = JSON.parse(readFileSync(path, 'utf-8'));
+        } else {
+            root = snapshot({ path, ignore: [], include: [], exclude: [] });
+        }
 
         // Generate the graph
         const svg = await generateForceDirectedTreeGraph(root, {
