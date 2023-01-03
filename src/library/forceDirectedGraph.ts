@@ -22,6 +22,12 @@ interface options {
     width: number,
     /** Height of the SVG output */
     height: number,
+    margin: {
+        top: number,
+        right: number,
+        bottom: number,
+        left: number
+    },
 
     // Force Directed Tree Options
     // ---------------------------
@@ -30,10 +36,8 @@ interface options {
     linkStrength: number,
     /** Distance of the links */
     linkDistance: number,
-    /** Charge of the nodes */
-    charge: number,
-    /** Gravity of the nodes */
-    gravity: number,
+    /** Many body force multiplier. Negative values imply repulsion and positive values imply attraction */
+    force: number,
     /** X position of the center of the force-directed-tree */
     centerX: number,
     /** Y position of the center of the force-directed-tree */
@@ -79,12 +83,17 @@ const defaultOptions: options = {
     // SVG Options
     width: 400,
     height: 400,
+    margin: {
+        top: 20,
+        right: 20,
+        bottom: 20,
+        left: 20
+    },
 
     // Force Directed Tree Options
     linkStrength: 1,
     linkDistance: 30,
-    charge: -30,
-    gravity: 0.1,
+    force: -60,
     centerX: 200, // Half of the width
     centerY: 200, // Half of the height
     sortFn: (a, b) => a.data.name.localeCompare(b.data.name),
@@ -120,9 +129,14 @@ export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<o
 
     // Create SVG
     const svg = d3.select(document.body).append('svg')
-        .attr('width', options.width)
-        .attr('height', options.height)
-        .attr('viewBox', [-options.width / 2, -options.height / 2, options.width, options.height]);
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr("viewBox", [
+            -options.width - options.margin.left,
+            -options.height - options.margin.top,
+            2 * options.width + options.margin.right,
+            2 * options.height + options.margin.bottom
+        ]);
 
     // Create tree
     const tree = d3.tree<Node>()
@@ -142,11 +156,15 @@ export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<o
 
     // Create simulation
     const simulation = d3.forceSimulation(descendants)
-        .force('link', d3.forceLink(links).id(d => (d as Node).path))
-        .force('charge', d3.forceManyBody())
         .force('center', d3.forceCenter(options.centerX, options.centerY))
+        .force('charge', d3.forceManyBody().strength(options.force))
         .force('x', d3.forceX())
         .force('y', d3.forceY())
+        .force('link', d3.forceLink(links)
+            .id(d => (d as Node).path)
+            .strength(options.linkStrength)
+            .distance(options.linkDistance)
+        )
 
 
     // Create links

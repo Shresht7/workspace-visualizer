@@ -17,10 +17,13 @@ interface options {
     // SVG Options
     // -----------
 
-    /** Width of the SVG output */
-    width: number,
-    /** Height of the SVG output */
-    height: number,
+    /** Margins around the radial-tree-graph */
+    margin: {
+        top: number,
+        right: number,
+        bottom: number,
+        left: number
+    },
 
     // Radial Tree Options
     // -------------------
@@ -63,6 +66,7 @@ interface options {
     textStroke: string | ((d: d3.HierarchyPointNode<Node>) => string),
     /** Stroke width of the text */
     textStrokeWidth: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    textSize: number | ((d: d3.HierarchyPointNode<Node>) => number),
 }
 
 // ---------------
@@ -72,8 +76,7 @@ interface options {
 /** Default options for the radial-tree-graph SVG */
 const defaultOptions: options = {
     // SVG Options
-    width: 2400,
-    height: 2400,
+    margin: { top: 40, right: 40, bottom: 40, left: 40 },
 
     // Radial Tree Options
     angle: 2 * Math.PI, // 360 degrees sweep
@@ -95,6 +98,7 @@ const defaultOptions: options = {
     // Styling Options - Text
     textStroke: "#eee",
     textStrokeWidth: 1,
+    textSize: 10,
 }
 
 // ==========================
@@ -114,9 +118,14 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
 
     // Create SVG
     const svg = d3.select(document.body).append("svg")
-        .attr("width", options.width / 2)
-        .attr("height", options.height / 2)
-        .attr("viewBox", [-options.radius, -options.radius, options.width, options.height]);
+        .attr("width", '100%')
+        .attr("height", '100%')
+        .attr("viewBox", [
+            -options.radius - options.margin.left,
+            -options.radius - options.margin.top,
+            2 * options.radius + options.margin.right,
+            2 * options.radius + options.margin.bottom
+        ]);
 
     // Create tree
     const tree = d3.tree<Node>()
@@ -175,6 +184,7 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
         .attr("paint-order", "stroke")
         .attr("stroke", options.textStroke)
         .attr("stroke-width", options.textStrokeWidth)
+        .attr("font-size", options.textSize)
         .attr('fill', options.fill)
         .text((d, i) => d.data.name);
 
