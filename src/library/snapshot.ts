@@ -9,6 +9,10 @@ export interface options {
     exclude: string[],
 }
 
+// ========
+// SNAPSHOT
+// ========
+
 /** Create a snapshot of your workspace */
 export function snapshot({
     path,
@@ -16,17 +20,19 @@ export function snapshot({
     include,
     exclude,
 }: options) {
-    // Create the root node
+    // Create the root node of the tree from the path
     const root = new Node(path);
 
-    // Add the rules of selection
+    // Add the rules of selection.
+    // They determine which files and folders are included in and excluded from the snapshot.
+    // These rules are applied in the order they are added.
     ignore.forEach((pattern) => root.addIgnoreRule(pattern));
     include.forEach((pattern) => root.addIncludeRule(pattern));
     exclude.forEach((pattern) => root.addExcludeRule(pattern));
 
-    // Build the tree
+    // Build the tree from the root node down
     root.buildTree();
 
-    // Write the snapshot to the output file
+    // Return the tree
     return root;
 }
