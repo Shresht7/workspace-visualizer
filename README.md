@@ -37,9 +37,14 @@ workspace-visualizer snapshot --path <path-to-workspace> --output <path-to-outpu
 
 | Option           | Description             | Default            |
 | ---------------- | ----------------------- | ------------------ |
-| `--path`         | Path to the workspace   | `process.cwd()`    |
-| `--output`       | Path to the output file | `./workspace.json` |
-| `--pretty-print` | Pretty print the output | `false`            |
+| `-p, --path`     | Path to the workspace   | `process.cwd()`    |
+| `-o, -output`    | Path to the output file | `./workspace.json` |
+| `-i, --ignore`   | Ignore patterns         | `['.git']`         |
+| `-n, --include`  | Include patterns        | `[]`               |
+| `-e, --exclude`  | Exclude patterns        | `[]`               |
+| `-j --json`      | Output as JSON          | `false`            |
+| `--pretty-print` | Pretty print JSON       | `false`            |
+
 
 ### Visualize
 
