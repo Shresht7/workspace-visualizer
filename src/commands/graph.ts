@@ -1,11 +1,15 @@
 // Library
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { generateForceDirectedTreeGraph } from "../library/forceDirectedGraph.js";
 
 // Type Definitions
-type graph = (options: { path: string, output: string }) => void;
+interface graphOptions {
+    path: string,
+    output: string,
+}
+type Graph = (options: graphOptions) => void;
 
-export const command: Command<graph> = {
+export const command: Command<Graph> = {
     name: "graph",
     description: "Visualize your workspace tree as a graph",
     args: [
@@ -24,10 +28,23 @@ export const command: Command<graph> = {
         },
     ],
     /** Create a graph of your workspace */
-    run: ({ path, output }) => {
+    run: async ({ path, output }) => {
         console.log('Creating graph...')
+
+        // Read the JSON file
         const root = JSON.parse(readFileSync(path, 'utf-8'));
-        generateForceDirectedTreeGraph(root, output);
+
+        // Generate the graph
+        const svg = await generateForceDirectedTreeGraph(root, {
+            width: 400,
+            height: 400
+        });
+
+        // Write the SVG to the output file
+        if (svg) {
+            writeFileSync(output, svg.outerHTML);
+        }
+
         console.log('Graph created successfully! -- ' + output)
     }
 }

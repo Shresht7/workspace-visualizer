@@ -1,33 +1,43 @@
 // Library
 import * as d3 from 'd3';
 import { JSDOM } from 'jsdom';
-import * as fs from 'node:fs';
 import { Node } from '../class/Node.js';
 
-// Constants
-const width = 400;
-const height = 400;
-
-// JSDOM
-const dom = new JSDOM();
+interface options {
+    width: number,
+    height: number,
+}
 
 /**
  * Generate a force directed tree graph
- * @param root The root node
- * @param output The output file path
- * @param body The body element
+ * @param {Node} root The root node
+ * @param {options} options The options
+ * @returns {Promise<SVGElement | null>} The SVG element
+ * @async Needs to wait for the simulation to end
+ * @example
+ * const svg = await generateForceDirectedTreeGraph(root, {
+ *    width: 400,
+ *   height: 400
+ * });
  */
-export function generateForceDirectedTreeGraph(root: Node, output: string, body: HTMLElement = dom.window.document.body) {
+export async function generateForceDirectedTreeGraph(root: Node, options: options = {
+    width: 400,
+    height: 400,
+}): Promise<SVGElement | null> {
+    // JSDOM
+    const dom = new JSDOM();
+    const body = dom.window.document.body;
+
     // Create SVG
     const svg = d3.select(body)
         .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('viewBox', [-width / 2, -height / 2, width, height]);
+        .attr('width', options.width)
+        .attr('height', options.height)
+    // .attr('viewBox', [-options.width / 2, -options.height / 2, options.width, options.height]);
 
     // Create tree
     const tree = d3.tree<Node>()
-        .size([width, height]);
+        .size([options.width, options.height]);
 
     // Create root
     const nodes = tree(d3.hierarchy(root));
@@ -38,7 +48,7 @@ export function generateForceDirectedTreeGraph(root: Node, output: string, body:
     const simulation = d3.forceSimulation(descendants)
         .force('link', d3.forceLink(links).id(d => (d as Node).path))
         .force('charge', d3.forceManyBody())
-        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('center', d3.forceCenter(options.width / 2, options.height / 2))
         .force('x', d3.forceX())
         .force('y', d3.forceY())
 
@@ -81,11 +91,10 @@ export function generateForceDirectedTreeGraph(root: Node, output: string, body:
             .attr('cy', d => d.y);
     });
 
-    // Write the SVG when the simulation ends
-    simulation.on('end', () => {
-        const element = svg.node();
-        if (!element) { return; }
-        // Write the SVG
-        fs.writeFileSync(output, element.outerHTML);
+    return new Promise((resolve, reject) => {
+        // Write the SVG when the simulation ends
+        simulation.on('end', () => {
+            resolve(svg.node())
+        })
     })
 }
