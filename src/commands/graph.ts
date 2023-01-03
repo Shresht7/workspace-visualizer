@@ -9,7 +9,7 @@ interface graphOptions {
 }
 type Graph = (options: graphOptions) => void;
 
-export const command: Command<Graph> = {
+const command: Command<Graph> = {
     name: "graph",
     description: "Visualize your workspace tree as a graph",
     args: [
@@ -49,6 +49,6 @@ export const command: Command<Graph> = {
     }
 }
 
-// -------------------
-export default command
-// -------------------
+// --------------------
+export default command;
+// --------------------

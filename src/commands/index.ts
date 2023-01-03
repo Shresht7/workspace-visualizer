@@ -3,7 +3,7 @@ import snapshot from './snapshot.js';
 import graph from './graph.js';
 
 // Export commands
-export const commands = [
+export const commands: Command<any>[] = [
     snapshot,
     graph
 ];
