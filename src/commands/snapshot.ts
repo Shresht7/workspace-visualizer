@@ -5,6 +5,7 @@ import { snapshot, options } from "../library/snapshot.js";
 // Type Definitions
 interface snapshotOptions extends options {
     output: string,
+    json: boolean,
     prettyPrint: boolean
 }
 type Snapshot = (options: snapshotOptions) => void;
@@ -24,6 +25,11 @@ const command: Command<Snapshot> = {
             name: "-o, --output [output]",
             description: "The output file path",
             default: "./workspace.json"
+        },
+        {
+            name: "-j, --json",
+            description: "Output the JSON to the console",
+            default: false
         },
         {
             name: "-i, --ignore [ignore...]",
@@ -53,12 +59,20 @@ const command: Command<Snapshot> = {
         // Create the snapshot
         const root = snapshot(options)
 
-        // Write the snapshot to the output file
-        writeFileSync(options.output, JSON.stringify(
+        // Convert the snapshot to JSON
+        const json = JSON.stringify(
             root,
             null,
             options.prettyPrint ? 4 : 0
-        ));
+        )
+
+        if (options.json) {
+            // Output the JSON to the console
+            console.log(json)
+        } else {
+            // Write the snapshot to the output file
+            writeFileSync(options.output, json);
+        }
 
         console.log('Snapshot created successfully! -- ' + options.output)
     },
