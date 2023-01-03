@@ -1,6 +1,6 @@
 // Library
 import { extname } from "node:path"; // Node.js path module to get the extension of the file
-import extensionColors from "./colorAssociation.json"; // This is a JSON file with the colors of the extensions
+import extensionColors from "./colorAssociation.json" assert { type: 'json' }; // This is a JSON file with the colors of the extensions
 
 /**
  * Determines the color of the extension icon based on the file extension
