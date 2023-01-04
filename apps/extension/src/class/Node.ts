@@ -51,14 +51,14 @@ export class Node {
     /** Update the node stats */
     async updateStats() {
         // Get the entry stats
-        vscode.workspace.fs.stat(this.uri).then((stat) => {
-            // Set properties
-            this.name = path.basename(this.path);
-            this.type = stat.type;
-            this.size = stat.size;
-            this.createdAt = stat.ctime;
-            this.modifiedAt = stat.mtime;
-        });
+        const stat = await vscode.workspace.fs.stat(this.uri);
+
+        // Set properties
+        this.name = path.basename(this.path);
+        this.type = stat.type;
+        this.size = stat.size;
+        this.createdAt = stat.ctime;
+        this.modifiedAt = stat.mtime;
     }
 
     /** Build the node tree */
@@ -75,24 +75,24 @@ export class Node {
 
         // For each entry
         for (const entry of entries) {
+            const childPath = path.join(this.path, entry);
+
             // Create a new node
-            const node = new Node(
-                vscode.Uri.file(
-                    path.join(this.path, entry)
-                )
+            const child = new Node(
+                vscode.Uri.file(childPath)
             );
 
+            // Update the node stats
+            await child.updateStats();
+
             // If the node is a directory
-            if (node.type === vscode.FileType.Directory) {
+            if (child.type === vscode.FileType.Directory) {
                 // Build the tree (stats update is done automatically in the buildTree method)
-                await node.buildTree();
-            } else {
-                // Update stats and continue
-                await node.updateStats();
+                await child.buildTree();
             }
 
             // Add the node to the children
-            this.children.push(node);
+            this.children.push(child);
         };
     }
 
