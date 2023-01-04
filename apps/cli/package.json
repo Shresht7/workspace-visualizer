@@ -4,8 +4,8 @@
   "description": "A simple tool to record and visualize a file-system workspace",
   "main": "build/index.js",
   "bin": {
-    "shresht7/workspace-visualizer": "build/cli/index.js",
-    "workspace-visualizer": "build/cli/index.js"
+    "shresht7/workspace-visualizer": "build/index.js",
+    "workspace-visualizer": "build/index.js"
   },
   "type": "module",
   "scripts": {
