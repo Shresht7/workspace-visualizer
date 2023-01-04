@@ -7,7 +7,9 @@
   "type": "module",
   "scripts": {
     "start": "node build/index.js",
-    "build": "tsc",
+    "build": "npm run build:tsc && npm run build:export",
+    "build:tsc": "tsc",
+    "build:export": "node ./build/scripts/exportFileColorAssociations.js ./fileColors.json",
     "watch": "tsc -w",
     "clean": "npx rimraf build node_modules"
   },
