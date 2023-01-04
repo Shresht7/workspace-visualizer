@@ -3,6 +3,8 @@
 import * as vscode from 'vscode';
 import { Node } from './class/Node';
 
+import { getHTMLContent } from './getHTMLContent';
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
@@ -37,10 +39,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from vscode-workspace-visualizer!');
 
 		//	Create and show a new webview pane
-		const panel = vscode.window.createWebviewPanel('fstree', 'FSTree', vscode.ViewColumn.One);
+		const panel = vscode.window.createWebviewPanel('fstree', 'FSTree', vscode.ViewColumn.One, { enableScripts: true });
 
 		//	Set HTML Content
-		panel.webview.html = JSON.stringify(node, null, 4);
+		panel.webview.html = getHTMLContent(JSON.stringify(node));
 
 		//	When the panel is disposed
 		panel.onDidDispose(() => {
