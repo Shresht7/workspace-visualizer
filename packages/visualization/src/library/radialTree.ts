@@ -49,7 +49,7 @@ export interface RadialGraphOptions {
     /** Fill color of the nodes */
     nodeFill: string | ((d: d3.HierarchyPointNode<Node>) => string),
     /** Radius of the nodes */
-    nodeR: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    nodeRadius: number | ((d: d3.HierarchyPointNode<Node>) => number),
     /** Stroke color of the text */
     nodeTextStroke: string | ((d: d3.HierarchyPointNode<Node>) => string),
     /** Stroke width of the text */
@@ -77,16 +77,16 @@ const defaultOptions: RadialGraphOptions = {
     sortFn: (a, b) => d3.ascending(a.data.name, b.data.name), // sort by name in ascending order
 
     // Styling Options - Links
-    linkStroke: '#ccc',
+    linkStroke: '#333',
     linkStrokeOpacity: 0.6,
     linkStrokeLineCap: 'round',
     linkStrokeLineJoin: 'round',
     linkStrokeWidth: 1.5,
 
     nodeFill: '#fff',
-    nodeR: 2.5,
+    nodeRadius: 2.5,
     nodeTextStroke: "#eee",
-    nodeTextStrokeWidth: 1,
+    nodeTextStrokeWidth: 2,
     nodeTextSize: 10,
 
 }
@@ -157,7 +157,7 @@ export async function generateRadialTree(root: Node, opts: Partial<RadialGraphOp
     // Add node circle
     node.append("circle")
         .attr("fill", options.nodeFill)
-        .attr("r", options.nodeR)
+        .attr("r", options.nodeRadius)
 
     // Add title to the nodes
     node.append('title')
