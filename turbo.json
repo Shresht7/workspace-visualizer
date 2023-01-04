@@ -10,6 +10,11 @@
             "outputs": [
                 "build/**"
             ]
+        },
+        "test": {
+            "outputs": [
+                "build/**"
+            ]
         }
     }
 }
