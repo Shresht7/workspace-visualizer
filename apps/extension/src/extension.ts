@@ -23,7 +23,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	let disposables: vscode.Disposable[] = [];
 	disposables.push(
 		//	Show Force Directed Graph Command
-		vscode.commands.registerCommand('workspace-visualizer.hello-world', commands.showForceDirectedGraph),
+		vscode.commands.registerCommand('workspace-visualizer.show-force-directed-graph', commands.showForceDirectedGraph),
 		//	Side Panel Webview Provider
 		vscode.window.registerWebviewViewProvider(SideViewProvider.viewType, new SideViewProvider(context.extensionUri))
 	);

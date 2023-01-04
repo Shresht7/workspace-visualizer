@@ -1,7 +1,7 @@
 {
   "name": "@workspace-visualizer/vscode-workspace-visualizer",
   "displayName": "vscode-workspace-visualizer",
-  "description": "",
+  "description": "Visualize your workspace",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.74.0"
@@ -26,8 +26,8 @@
     },
     "commands": [
       {
-        "command": "vscode-workspace-visualizer.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-workspace-visualizer.show-force-directed-graph",
+        "title": "Show Force Directed Graph"
       }
     ]
   },
