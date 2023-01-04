@@ -1,14 +1,14 @@
 // Library
 import { readFileSync, writeFileSync } from "node:fs";
 import { extname } from "node:path";
-import { snapshot } from "@workspace-visualizer/snapshot";
+import { snapshot } from "@workspace-visualizer/fs-tree";
 import { generateForceDirectedTreeGraph } from "@workspace-visualizer/visualization";
 
 // Helpers
-import { getExtensionColor } from "@workspace-visualizer/file-color-association"; // Assigns colors to file extensions
+import { getExtensionColor } from "@workspace-visualizer/file-color-associations"; // Assigns colors to file extensions
 
 // Type Definitions
-import type { Node } from "@workspace-visualizer/snapshot";
+import type { Node } from "@workspace-visualizer/fs-tree";
 
 interface graphOptions {
     path: string,
@@ -37,7 +37,6 @@ const command: Command<Graph> = {
     /** Create a graph of your workspace */
     run: async ({ path, output }) => {
         console.log('Creating graph...')
-
 
         let root: Node
         if (extname(path) === '.json') {

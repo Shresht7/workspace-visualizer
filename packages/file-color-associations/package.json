@@ -1,5 +1,5 @@
 {
-  "name": "@workspace-visualizer/file-color-association",
+  "name": "@workspace-visualizer/file-color-associations",
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",

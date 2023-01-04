@@ -2,7 +2,7 @@
 import * as d3 from 'd3'; // Data-Visualization Library
 
 // Type Definitions
-import type { Node } from '@workspace-visualizer/snapshot';
+import type { Node } from '@workspace-visualizer/fs-tree';
 
 // ----------------
 // TYPE DEFINITIONS

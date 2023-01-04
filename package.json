@@ -8,7 +8,8 @@
     "scripts": {
         "build": "npx turbo build",
         "watch": "npx turbo watch",
-        "test": "npx turbo test"
+        "test": "npx turbo test",
+        "clean": "npx rimraf build node_modules"
     },
     "devDependencies": {
         "@types/node": "^18.11.18",
