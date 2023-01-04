@@ -9,75 +9,65 @@ import type { Node } from '@workspace-visualizer/fs-tree'
 // ----------------
 
 /** Options to customize the force-directed-tree-graph SVG */
-interface options {
+export interface ForceDirectedGraphOptions {
 
     // SVG Options
     // -----------
 
-    svg: {
-        /** Width of the SVG output */
-        width: number,
-        /** Height of the SVG output */
-        height: number,
-        /** Margins around the force-directed-tree-graph */
-        margin: {
-            top: number,
-            right: number,
-            bottom: number,
-            left: number
-        },
-    }
+    /** Width of the SVG output */
+    width: number,
+    /** Height of the SVG output */
+    height: number,
+    /** Margins around the force-directed-tree-graph */
+    marginTop: number,
+    marginRight: number,
+    marginBottom: number,
+    marginLeft: number,
 
     // Force Directed Tree Options
     // ---------------------------
 
-    graph: {
-        /** X position of the center of the force-directed-tree */
-        centerX: number,
-        /** Y position of the center of the force-directed-tree */
-        centerY: number,
-        /** Strength of the links */
-        linkStrength: number | ((d: d3.HierarchyPointLink<Node>) => number),
-        /** Distance of the links */
-        linkDistance: number | ((d: d3.HierarchyPointLink<Node>) => number),
-        /** Many body force multiplier. Negative values imply repulsion and positive values imply attraction */
-        nodeForce: number | ((d: d3.SimulationNodeDatum) => number),
-        /** Callback function to set separation of two adjacent nodes */
-        sortFn: (a: d3.HierarchyPointNode<Node>, b: d3.HierarchyNode<Node>) => number,
-    }
+    /** X position of the center of the force-directed-tree */
+    centerX: number,
+    /** Y position of the center of the force-directed-tree */
+    centerY: number,
+    /** Strength of the links */
+    linkStrength: number | ((d: d3.HierarchyPointLink<Node>) => number),
+    /** Distance of the links */
+    linkDistance: number | ((d: d3.HierarchyPointLink<Node>) => number),
+    /** Many body force multiplier. Negative values imply repulsion and positive values imply attraction */
+    nodeForce: number | ((d: d3.SimulationNodeDatum) => number),
+    /** Callback function to set separation of two adjacent nodes */
+    sortFn: (a: d3.HierarchyPointNode<Node>, b: d3.HierarchyNode<Node>) => number,
 
     // Styling Options
     // ---------------
 
+    // Links
 
-    style: {
-        // Links
-        link: {
-            /** Stroke color of the links */
-            stroke: string | ((d: d3.HierarchyPointLink<Node>) => string),
-            /** Stroke opacity of the links */
-            strokeOpacity: number | ((d: d3.HierarchyPointLink<Node>) => number),
-            /** Stroke linecap of the links */
-            strokeLineCap: StrokeLineCap | ((d: d3.HierarchyPointLink<Node>) => StrokeLineCap),
-            /** Stroke linejoin of the links */
-            strokeLineJoin: StrokeLineJoin | ((d: d3.HierarchyPointLink<Node>) => StrokeLineJoin),
-            /** Stroke width of the links */
-            strokeWidth: number | ((d: d3.HierarchyPointLink<Node>) => number),
-        },
-        // Nodes
-        node: {
-            /** Stroke color of the nodes */
-            stroke: string | ((d: d3.HierarchyPointNode<Node>) => string),
-            /** Stroke width of the nodes */
-            strokeWidth: number | ((d: d3.HierarchyPointNode<Node>) => number),
-            /** Fill color of the nodes */
-            fill: string | ((d: d3.HierarchyPointNode<Node>) => string),
-            /** Radius of the nodes */
-            r: number | ((d: d3.HierarchyPointNode<Node>) => number),
-            /** Callback function to set the title of the nodes */
-            title: string | ((d: d3.HierarchyPointNode<Node>) => string),
-        }
-    }
+    /** Stroke color of the links */
+    linkStroke: string | ((d: d3.HierarchyPointLink<Node>) => string),
+    /** Stroke opacity of the links */
+    linkStrokeOpacity: number | ((d: d3.HierarchyPointLink<Node>) => number),
+    /** Stroke linecap of the links */
+    linkStrokeLineCap: StrokeLineCap | ((d: d3.HierarchyPointLink<Node>) => StrokeLineCap),
+    /** Stroke linejoin of the links */
+    linkStrokeLineJoin: StrokeLineJoin | ((d: d3.HierarchyPointLink<Node>) => StrokeLineJoin),
+    /** Stroke width of the links */
+    linkStrokeWidth: number | ((d: d3.HierarchyPointLink<Node>) => number),
+
+    // Nodes
+
+    /** Stroke color of the nodes */
+    nodeStroke: string | ((d: d3.HierarchyPointNode<Node>) => string),
+    /** Stroke width of the nodes */
+    nodeStrokeWidth: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    /** Fill color of the nodes */
+    nodeFill: string | ((d: d3.HierarchyPointNode<Node>) => string),
+    /** Radius of the nodes */
+    nodeR: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    /** Callback function to set the title of the nodes */
+    nodeTitle: string | ((d: d3.HierarchyPointNode<Node>) => string),
 
 }
 
@@ -86,49 +76,37 @@ interface options {
 // ---------------
 
 /** Default options */
-const defaultOptions: options = {
+const defaultOptions: ForceDirectedGraphOptions = {
 
     // SVG Options
-    svg: {
-        width: 400,
-        height: 400,
-        margin: {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20
-        },
-    },
+    width: 400,
+    height: 400,
+    marginTop: 0,
+    marginRight: 0,
+    marginBottom: 0,
+    marginLeft: 0,
 
     // Force Directed Tree Options
-    graph: {
-        centerX: 200, // Half of the width
-        centerY: 200, // Half of the height
-        linkStrength: 1,
-        linkDistance: 30,
-        nodeForce: -60,
-        sortFn: (a, b) => a.data.name.localeCompare(b.data.name),
-    },
+    centerX: 200, // Half of the width
+    centerY: 200, // Half of the height
+    linkStrength: 1,
+    linkDistance: 30,
+    nodeForce: -60,
+    sortFn: (a, b) => a.data.name.localeCompare(b.data.name),
 
     // Styling Options
-    style: {
-        // Styling Options - Links
-        link: {
-            stroke: '#333',
-            strokeOpacity: 0.6,
-            strokeLineCap: 'round',
-            strokeLineJoin: 'round',
-            strokeWidth: 1.5,
-        },
-        // Styling Options - Nodes
-        node: {
-            stroke: '#fff',
-            strokeWidth: 1.5,
-            fill: '#fff',
-            r: 5,
-            title: (d) => d.data.name
-        }
-    },
+    // Styling Options - Links
+    linkStroke: '#333',
+    linkStrokeOpacity: 0.6,
+    linkStrokeLineCap: 'round',
+    linkStrokeLineJoin: 'round',
+    linkStrokeWidth: 1.5,
+    // Styling Options - Nodes
+    nodeStroke: '#fff',
+    nodeStrokeWidth: 1.5,
+    nodeFill: '#fff',
+    nodeR: 5,
+    nodeTitle: (d) => d.data.name
 
 }
 
@@ -142,31 +120,31 @@ const defaultOptions: options = {
  * @param options Options
  * @returns SVGElement
  */
-export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<options> = defaultOptions): Promise<SVGElement | null> {
+export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<ForceDirectedGraphOptions> = defaultOptions): Promise<SVGElement | null> {
 
     // Merge options with defaults
-    const options = { ...defaultOptions, ...opts } as options
+    const options = { ...defaultOptions, ...opts } as ForceDirectedGraphOptions
 
     // Create SVG
     const svg = d3.select(document.body).append('svg')
         .attr('width', '100%')
         .attr('height', '100%')
         .attr("viewBox", [
-            -options.svg.width - options.svg.margin.left,
-            -options.svg.height - options.svg.margin.top,
-            2 * options.svg.width + options.svg.margin.right,
-            2 * options.svg.height + options.svg.margin.bottom
+            -options.width - options.marginLeft,
+            -options.height - options.marginTop,
+            2 * options.width + options.marginRight,
+            2 * options.height + options.marginBottom
         ])
 
     // Create tree
     const tree = d3.tree<Node>()
-        .size([options.svg.width, options.svg.height])
+        .size([options.width, options.height])
 
     // Create node tree
     const nodes = tree(d3.hierarchy(root))
 
     // Sort nodes
-    nodes.sort(options.graph.sortFn)
+    nodes.sort(options.sortFn)
 
     // Create descendants and links
     const descendants = nodes.descendants()
@@ -174,14 +152,14 @@ export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<o
 
     // Create simulation
     const simulation = d3.forceSimulation(descendants)
-        .force('center', d3.forceCenter(options.graph.centerX, options.graph.centerY))
-        .force('charge', d3.forceManyBody().strength(options.graph.nodeForce))
+        .force('center', d3.forceCenter(options.centerX, options.centerY))
+        .force('charge', d3.forceManyBody().strength(options.nodeForce))
         .force('x', d3.forceX())
         .force('y', d3.forceY())
         .force('link', d3.forceLink(links)
             .id(d => (d as Node).path)
-            .strength(options.graph.linkStrength)
-            .distance(options.graph.linkDistance)
+            .strength(options.linkStrength)
+            .distance(options.linkDistance)
         )
 
 
@@ -190,25 +168,25 @@ export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<o
         .selectAll('line')
         .data(links)
         .join('line')
-        .attr('stroke', options.style.link.stroke)
-        .attr('stroke-opacity', options.style.link.strokeOpacity)
-        .attr('stroke-linecap', options.style.link.strokeLineCap)
-        .attr('stroke-linejoin', options.style.link.strokeLineJoin)
-        .attr('stroke-width', options.style.link.strokeWidth)
+        .attr('stroke', options.linkStroke)
+        .attr('stroke-opacity', options.linkStrokeOpacity)
+        .attr('stroke-linecap', options.linkStrokeLineCap)
+        .attr('stroke-linejoin', options.linkStrokeLineJoin)
+        .attr('stroke-width', options.linkStrokeWidth)
 
     // Create nodes
     const node = svg.append('g')
         .selectAll('circle')
         .data(descendants)
         .join('circle')
-        .attr('stroke', options.style.node.stroke)
-        .attr('stroke-width', options.style.node.strokeWidth)
-        .attr('r', options.style.node.r)
-        .attr('fill', options.style.node.fill)
+        .attr('stroke', options.nodeStroke)
+        .attr('stroke-width', options.nodeStrokeWidth)
+        .attr('r', options.nodeR)
+        .attr('fill', options.nodeFill)
 
     // Add title to the nodes
     node.append('title')
-        .text(options.style.node.title)
+        .text(options.nodeTitle)
 
     // Update position of the nodes and links
     simulation.on('tick', () => {

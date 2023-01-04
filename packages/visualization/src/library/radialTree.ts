@@ -9,65 +9,52 @@ import type { Node } from '@workspace-visualizer/fs-tree'
 // ----------------
 
 /** Options to customize the radial-tree-graph SVG */
-interface options {
+export interface RadialGraphOptions {
 
     // SVG Options
     // -----------
 
-    svg: {
-        /** Margins around the radial-tree-graph */
-        margin: {
-            top: number,
-            right: number,
-            bottom: number,
-            left: number
-        },
-    }
+    /** Margins around the radial-tree-graph */
+    marginTop: number,
+    marginRight: number,
+    marginBottom: number,
+    marginLeft: number,
 
     // Radial Tree Options
     // -------------------
 
-    graph: {
-        /** Radial sweep angle of the tree */
-        angle: number,
-        /** Radius of the radial tree */
-        radius: number,
-        /** Callback function to set separation of two adjacent nodes */
-        separator: (a: d3.HierarchyPointNode<Node>, b: d3.HierarchyPointNode<Node>) => number,
-        /** Callback function to sort nodes */
-        sortFn: (a: d3.HierarchyPointNode<Node>, b: d3.HierarchyNode<Node>) => number,
-    }
+    /** Radial sweep angle of the tree */
+    angle: number,
+    /** Radius of the radial tree */
+    radius: number,
+    /** Callback function to set separation of two adjacent nodes */
+    separator: (a: d3.HierarchyPointNode<Node>, b: d3.HierarchyPointNode<Node>) => number,
+    /** Callback function to sort nodes */
+    sortFn: (a: d3.HierarchyPointNode<Node>, b: d3.HierarchyNode<Node>) => number,
 
     // Styling Options
     // ---------------
 
-    style: {
-        // Links
-        link: {
-            /** Stroke color of the links */
-            stroke: string | ((d: d3.HierarchyPointLink<Node>) => string),
-            /** Stroke opacity of the links */
-            strokeOpacity: number | ((d: d3.HierarchyPointLink<Node>) => number),
-            /** Stroke linecap of the links */
-            strokeLineCap: StrokeLineCap | ((d: d3.HierarchyPointLink<Node>) => StrokeLineCap),
-            /** Stroke linejoin of the links */
-            strokeLineJoin: StrokeLineJoin | ((d: d3.HierarchyPointLink<Node>) => StrokeLineJoin),
-            /** Stroke width of the links */
-            strokeWidth: number | ((d: d3.HierarchyPointLink<Node>) => number),
-        },
-        // Nodes
-        node: {
-            /** Fill color of the nodes */
-            fill: string | ((d: d3.HierarchyPointNode<Node>) => string),
-            /** Radius of the nodes */
-            r: number | ((d: d3.HierarchyPointNode<Node>) => number),
-            /** Stroke color of the text */
-            textStroke: string | ((d: d3.HierarchyPointNode<Node>) => string),
-            /** Stroke width of the text */
-            textStrokeWidth: number | ((d: d3.HierarchyPointNode<Node>) => number),
-            textSize: number | ((d: d3.HierarchyPointNode<Node>) => number),
-        }
-    }
+    /** Stroke color of the links */
+    linkStroke: string | ((d: d3.HierarchyPointLink<Node>) => string),
+    /** Stroke opacity of the links */
+    linkStrokeOpacity: number | ((d: d3.HierarchyPointLink<Node>) => number),
+    /** Stroke linecap of the links */
+    linkStrokeLineCap: StrokeLineCap | ((d: d3.HierarchyPointLink<Node>) => StrokeLineCap),
+    /** Stroke linejoin of the links */
+    linkStrokeLineJoin: StrokeLineJoin | ((d: d3.HierarchyPointLink<Node>) => StrokeLineJoin),
+    /** Stroke width of the links */
+    linkStrokeWidth: number | ((d: d3.HierarchyPointLink<Node>) => number),
+
+    /** Fill color of the nodes */
+    nodeFill: string | ((d: d3.HierarchyPointNode<Node>) => string),
+    /** Radius of the nodes */
+    nodeR: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    /** Stroke color of the text */
+    nodeTextStroke: string | ((d: d3.HierarchyPointNode<Node>) => string),
+    /** Stroke width of the text */
+    nodeTextStrokeWidth: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    nodeTextSize: number | ((d: d3.HierarchyPointNode<Node>) => number),
 
 }
 
@@ -76,38 +63,31 @@ interface options {
 // ---------------
 
 /** Default options for the radial-tree-graph SVG */
-const defaultOptions: options = {
-    // SVG Options
-    svg: {
-        margin: { top: 40, right: 40, bottom: 40, left: 40 },
-    },
+const defaultOptions: RadialGraphOptions = {
+    // SVG options
+    marginTop: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    marginLeft: 10,
 
     // Radial Tree Options
-    graph: {
-        angle: 2 * Math.PI, // 360 degrees sweep
-        radius: 1600, // 1600 pixels
-        separator: (a, b) => a.parent === b.parent ? 1 : 2, // 1 for siblings, 2 for non-siblings
-        sortFn: (a, b) => d3.ascending(a.data.name, b.data.name), // sort by name in ascending order
-    },
+    angle: 2 * Math.PI, // 360 degrees sweep
+    radius: 1600, // 1600 pixels
+    separator: (a, b) => a.parent === b.parent ? 1 : 2, // 1 for siblings, 2 for non-siblings
+    sortFn: (a, b) => d3.ascending(a.data.name, b.data.name), // sort by name in ascending order
 
-    style: {
-        link: {
-            // Styling Options - Links
-            stroke: '#ccc',
-            strokeOpacity: 0.6,
-            strokeLineCap: 'round',
-            strokeLineJoin: 'round',
-            strokeWidth: 1.5,
-        },
-        // Styling Options - Nodes
-        node: {
-            fill: '#fff',
-            r: 2.5,
-            textStroke: "#eee",
-            textStrokeWidth: 1,
-            textSize: 10,
-        }
-    }
+    // Styling Options - Links
+    linkStroke: '#ccc',
+    linkStrokeOpacity: 0.6,
+    linkStrokeLineCap: 'round',
+    linkStrokeLineJoin: 'round',
+    linkStrokeWidth: 1.5,
+
+    nodeFill: '#fff',
+    nodeR: 2.5,
+    nodeTextStroke: "#eee",
+    nodeTextStrokeWidth: 1,
+    nodeTextSize: 10,
 
 }
 
@@ -121,32 +101,32 @@ const defaultOptions: options = {
  * @param opts Options to customize the radial tree graph
  * @returns SVGElement
  */
-export async function generateRadialTree(root: Node, opts: Partial<options> = defaultOptions): Promise<SVGElement | null> {
+export async function generateRadialTree(root: Node, opts: Partial<RadialGraphOptions> = defaultOptions): Promise<SVGElement | null> {
 
     // merge options with defaults
-    const options = { ...defaultOptions, ...opts } as options
+    const options = { ...defaultOptions, ...opts } as RadialGraphOptions
 
     // Create SVG
     const svg = d3.select(document.body).append("svg")
         .attr("width", '100%')
         .attr("height", '100%')
         .attr("viewBox", [
-            -options.graph.radius - options.svg.margin.left,
-            -options.graph.radius - options.svg.margin.top,
-            2 * options.graph.radius + options.svg.margin.right,
-            2 * options.graph.radius + options.svg.margin.bottom
+            -options.radius - options.marginLeft,
+            -options.radius - options.marginTop,
+            2 * options.radius + options.marginRight,
+            2 * options.radius + options.marginBottom
         ])
 
     // Create tree
     const tree = d3.tree<Node>()
-        .size([options.graph.angle, options.graph.radius])
-        .separation(options.graph.separator)
+        .size([options.angle, options.radius])
+        .separation(options.separator)
 
     // Create node tree
     const nodes = tree(d3.hierarchy(root))
 
     // Sort nodes
-    nodes.sort(options.graph.sortFn)
+    nodes.sort(options.sortFn)
 
     // Create descendants and links
     const descendants = nodes.descendants()
@@ -158,11 +138,11 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
         .data(links)
         .join("path")
         .attr("fill", "none")
-        .attr("stroke", options.style.link.stroke)
-        .attr("stroke-width", options.style.link.strokeWidth)
-        .attr("stroke-opacity", options.style.link.strokeOpacity)
-        .attr("stroke-linecap", options.style.link.strokeLineCap)
-        .attr("stroke-linejoin", options.style.link.strokeLineJoin)
+        .attr("stroke", options.linkStroke)
+        .attr("stroke-width", options.linkStrokeWidth)
+        .attr("stroke-opacity", options.linkStrokeOpacity)
+        .attr("stroke-linecap", options.linkStrokeLineCap)
+        .attr("stroke-linejoin", options.linkStrokeLineJoin)
         // @ts-ignore - types don't seem to match up here
         .attr("d", d3.linkRadial().angle(d => d.x).radius(d => d.y))
 
@@ -176,8 +156,8 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
 
     // Add node circle
     node.append("circle")
-        .attr("fill", options.style.node.fill)
-        .attr("r", options.style.node.r)
+        .attr("fill", options.nodeFill)
+        .attr("r", options.nodeR)
 
     // Add title to the nodes
     node.append('title')
@@ -190,10 +170,10 @@ export async function generateRadialTree(root: Node, opts: Partial<options> = de
         .attr("x", d => d.x < Math.PI === !d.children ? 6 : -6)
         .attr("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
         .attr("paint-order", "stroke")
-        .attr("stroke", options.style.node.textStroke)
-        .attr("stroke-width", options.style.node.textStrokeWidth)
-        .attr("font-size", options.style.node.textSize)
-        .attr('fill', options.style.node.fill)
+        .attr("stroke", options.nodeTextStroke)
+        .attr("stroke-width", options.nodeTextStrokeWidth)
+        .attr("font-size", options.nodeTextSize)
+        .attr('fill', options.nodeFill)
         .text((d, i) => d.data.name)
 
     // Return SVG
