@@ -1,7 +1,7 @@
 // Library
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import ignore from 'ignore';
+import * as fs from 'node:fs'; // Node.js file system module
+import * as path from 'node:path'; // Node.js path module
+import ignore from 'ignore'; // Ignore manager for files and directories
 
 // ---------
 // NODE TYPE
@@ -18,8 +18,8 @@ export enum NodeType {
  * Determine the node type.
  * The node can be a `file`, `directory` or a `symbolic-link`.
  * Returns `undefined` if the node type is unknown.
- * @param {fs.Dirent | fs.Stats} file The file
- * @returns {NodeType | undefined} The node type
+ * @param file The file
+ * @returns The node type
  */
 export function determineNodeType(file: fs.Dirent | fs.Stats): NodeType | undefined {
     if (file.isFile()) {
@@ -51,6 +51,7 @@ export class Node {
     type: NodeType;
     /** The node path */
     path: string;
+    // TODO: Add the size property
     /** The node creation time */
     createdAt: number;
     /** The node access time */
@@ -115,8 +116,7 @@ export class Node {
 
     /**
      * Add an ignore rule.
-     * @param {string} rule The ignore rule
-     * @returns {void}
+     * @param rule The ignore rule
      * @example
      * node.addIgnoreRule('node_modules');
      * @example
@@ -128,8 +128,7 @@ export class Node {
 
     /**
      * Add an include rule.
-     * @param {string} rule The include rule
-     * @returns {void}
+     * @param rule The include rule
      * @example
      * node.addIncludeRule('*.js');
      * @example
@@ -142,8 +141,7 @@ export class Node {
 
     /**
      * Add an exclude rule.
-     * @param {string} rule The exclude rule
-     * @returns {void}
+     * @param rule The exclude rule
      * @example
      * node.addExcludeRule('*.js');
      * @example
@@ -155,8 +153,8 @@ export class Node {
 
     /**
      * Get the ignore filter. Determines which files and directories should be ignored.
-     * @param {string} entry The entry path
-     * @returns {Function} The ignore filter
+     * @param entry The entry path
+     * @returns The ignore filter function
      */
     private _getIgnoreFilter(entry: string): ((name: string) => boolean) {
 

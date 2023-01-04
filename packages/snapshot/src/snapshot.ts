@@ -1,5 +1,5 @@
 // Library
-import { Node } from "./class/Node.js";
+import { Node } from "./class/Node.js"; // Node class
 
 // Type Definitions
 export interface options {
@@ -13,7 +13,7 @@ export interface options {
 // SNAPSHOT
 // ========
 
-/** Create a snapshot of your workspace */
+/** Create a snapshot of your workspace tree */
 export function snapshot({
     path,
     ignore,
