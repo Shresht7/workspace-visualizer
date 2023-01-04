@@ -65,7 +65,7 @@ export interface ForceDirectedGraphOptions {
     /** Fill color of the nodes */
     nodeFill: string | ((d: d3.HierarchyPointNode<Node>) => string),
     /** Radius of the nodes */
-    nodeR: number | ((d: d3.HierarchyPointNode<Node>) => number),
+    nodeRadius: number | ((d: d3.HierarchyPointNode<Node>) => number),
     /** Callback function to set the title of the nodes */
     nodeTitle: string | ((d: d3.HierarchyPointNode<Node>) => string),
 
@@ -100,12 +100,12 @@ const defaultOptions: ForceDirectedGraphOptions = {
     linkStrokeOpacity: 0.6,
     linkStrokeLineCap: 'round',
     linkStrokeLineJoin: 'round',
-    linkStrokeWidth: 1.5,
+    linkStrokeWidth: 1,
     // Styling Options - Nodes
     nodeStroke: '#fff',
-    nodeStrokeWidth: 1.5,
+    nodeStrokeWidth: 1,
     nodeFill: '#fff',
-    nodeR: 5,
+    nodeRadius: 5,
     nodeTitle: (d) => d.data.name
 
 }
@@ -181,7 +181,7 @@ export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<F
         .join('circle')
         .attr('stroke', options.nodeStroke)
         .attr('stroke-width', options.nodeStrokeWidth)
-        .attr('r', options.nodeR)
+        .attr('r', options.nodeRadius)
         .attr('fill', options.nodeFill)
 
     // Add title to the nodes
