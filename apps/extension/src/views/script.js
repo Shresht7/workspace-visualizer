@@ -4,6 +4,8 @@ const width = 400;
 const height = 400;
 
 function showForceDirectedGraph(tree) {
+    console.log(tree);
+
     const root = d3.hierarchy(tree);
     const links = root.links();
     const nodes = root.descendants();
@@ -55,6 +57,7 @@ function showForceDirectedGraph(tree) {
 
 window.addEventListener('message', (event) => {
     const message = event.data;     //  The JSON payload
+    console.log(message.payload);
     switch (message.type) {
         case 'force-directed-graph':
             showForceDirectedGraph(message.payload);

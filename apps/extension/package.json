@@ -10,10 +10,20 @@
     "Other"
   ],
   "activationEvents": [
+    "onView:workspace-visualizer.workspace-side-view",
     "onCommand:vscode-workspace-visualizer.helloWorld"
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "workspace-visualizer.workspace-side-view",
+          "name": "Graph View"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "vscode-workspace-visualizer.helloWorld",
