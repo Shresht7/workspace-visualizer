@@ -80,7 +80,7 @@ const command: Command<Graph> = {
         {
             name: "--link-strength [linkStrength]",
             description: "The strength of the links between nodes",
-            default: 0.1
+            default: 1
         },
         {
             name: "--link-distance [linkDistance]",
@@ -90,12 +90,12 @@ const command: Command<Graph> = {
         {
             name: "--node-force [nodeForce]",
             description: "The force of the nodes",
-            default: -30
+            default: -60
         },
         {
             name: "--link-stroke [linkStroke]",
             description: "The stroke color of the links",
-            default: "#999"
+            default: "#333"
         },
         {
             name: "--link-stroke-width [linkStrokeWidth]",
@@ -125,7 +125,7 @@ const command: Command<Graph> = {
         {
             name: "--node-stroke-width [nodeStrokeWidth]",
             description: "The stroke width of the nodes",
-            default: "1.5px"
+            default: "1px"
         },
         {
             name: "--node-radius [nodeRadius]",
@@ -151,10 +151,14 @@ const command: Command<Graph> = {
 
         // Generate the graph
         const svg = await generateForceDirectedTreeGraph(root, {
+            // Set the node force of repulsion based on the file size
+            nodeForce: (d) => -(d as Node).size,
+            // Set the stroke color of the links and nodes based on the file extension
+            linkStroke: (d) => getExtensionColor(d.target.data.path),
+            // Set the node radius based on the file size
+            nodeRadius: (d) => Math.sqrt(d.data.size / Math.PI),
             // Set the fill color of the nodes based on the file extension
             nodeFill: (d) => getExtensionColor(d.data.path),
-            // Set the stroke color of the links based on the file extension
-            linkStroke: (d) => getExtensionColor(d.target.data.path),
             // Use user defined options if provided
             ...options,
         });
