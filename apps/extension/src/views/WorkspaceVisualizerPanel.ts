@@ -15,8 +15,15 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
     public static title = "Workspace Visualizer";
     /** Identifies the type of the webview panel */
     public static readonly viewType = "workspace-visualizer";
+    /** Extension path */
+    public static extensionUri: vscode.Uri;
     /** Settings for the webview panel */
-    public static readonly webviewOptions: vscode.WebviewOptions = { enableScripts: true };
+    public static get webviewOptions(): vscode.WebviewOptions {
+        return {
+            enableScripts: true,
+            localResourceRoots: [WorkspaceVisualizerPanel.extensionUri]
+        };
+    };
 
     /** Show the webview panel */
     public static show(
