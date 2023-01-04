@@ -13,6 +13,7 @@ type Snapshot = (options: snapshotOptions) => void;
 const command: Command<Snapshot> = {
     name: "snapshot",
     description: "Create a snapshot of your workspace",
+    aliases: ['s', 'snap', 'tree'],
     args: [
     ],
     options: [
