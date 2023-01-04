@@ -1,5 +1,7 @@
 # Workspace Visualizer
 
+<!-- TODO: REDO THE README FILE !!! -->
+
 This is a simple tool to record and visualize a workspace on the file-system.
 
 <!-- TODO: Add a screenshot of the visualization -->
