@@ -20,9 +20,16 @@ program
 
 // Add commands to program
 commands.forEach(cmd => {
+
+    // Add command
     const command = program
         .command(cmd.name)
         .description(cmd.description)
+
+    // Add aliases
+    cmd.aliases.forEach(alias => {
+        command.alias(alias)
+    })
 
     // Add arguments and options
     cmd.args.forEach(arg => {

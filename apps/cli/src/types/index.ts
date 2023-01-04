@@ -2,23 +2,27 @@
 // TYPE DEFINITIONS
 // ================
 
-interface Command<T extends Function> {
+/** The type of a command. */
+interface Command<T extends (...args: any[]) => void> {
     name: string;
     description: string;
+    aliases: string[];
     args: Argument[];
     options: Option[];
     run: T;
 }
 
-interface Argument {
+/** The type of an argument. */
+interface Argument<T = any> {
     name: string;
     description: string;
-    default: any;
+    default: T;
 }
 
-interface Option {
+/** The type of an option. */
+interface Option<T = any> {
     name: string;
     description: string;
-    default: any;
+    default: T;
     required?: boolean;
 }

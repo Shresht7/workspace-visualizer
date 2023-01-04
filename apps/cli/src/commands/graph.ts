@@ -22,6 +22,7 @@ type Graph = (options: GraphOptions) => void;
 const command: Command<Graph> = {
     name: "graph",
     description: "Visualize the workspace tree as a graph",
+    aliases: ['g', 'visualize', 'v'],
     args: [
     ],
     options: [
