@@ -65,6 +65,11 @@ export class WebviewPanel {
     }
 
     /** Dispose off the webview panel */
+    protected onDidDispose(dispose: () => any) {
+        this._disposables.push({ dispose });
+    }
+
+    /** Dispose off the webview panel */
     protected _dispose() {
         //	Clean up our resources
         this._panel.dispose();
