@@ -4,9 +4,9 @@ import { Node } from "./class/Node.js"; // Node class
 // Type Definitions
 export interface options {
     path: string,
-    ignore: string[],
-    include: string[],
-    exclude: string[],
+    ignore?: string[],
+    include?: string[],
+    exclude?: string[],
 }
 
 // ========
@@ -26,9 +26,9 @@ export function snapshot({
     // Add the rules of selection.
     // They determine which files and folders are included in and excluded from the snapshot.
     // These rules are applied in the order they are added.
-    ignore.forEach((pattern) => root.addIgnoreRule(pattern));
-    include.forEach((pattern) => root.addIncludeRule(pattern));
-    exclude.forEach((pattern) => root.addExcludeRule(pattern));
+    ignore?.forEach((pattern) => root.addIgnoreRule(pattern));
+    include?.forEach((pattern) => root.addIncludeRule(pattern));
+    exclude?.forEach((pattern) => root.addExcludeRule(pattern));
 
     // Build the tree from the root node down
     root.buildTree();
