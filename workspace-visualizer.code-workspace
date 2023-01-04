@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": ".",
+		},
+		{
+			"path": "./apps/cli"
+		},
+		{
+			"path": "./apps/extension"
+		},
+		{
+			"path": "./packages/file-color-associations"
+		},
+		{
+			"path": "./packages/fs-tree"
+		},
+		{
+			"path": "./packages/visualization"
+		},
+	],
+	"settings": {}
+}
