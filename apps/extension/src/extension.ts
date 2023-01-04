@@ -2,8 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { Node } from './class/Node';
+import { WorkspaceVisualizerPanel } from './views/WorkspaceVisualizerPanel';
 
-import { getHTMLContent } from './getHTMLContent';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -38,16 +38,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from vscode-workspace-visualizer!');
 
-		//	Create and show a new webview pane
-		const panel = vscode.window.createWebviewPanel('fstree', 'FSTree', vscode.ViewColumn.One, { enableScripts: true });
-
-		//	Set HTML Content
-		panel.webview.html = getHTMLContent(JSON.stringify(node));
-
-		//	When the panel is disposed
-		panel.onDidDispose(() => {
-			// Do stuff
-		}, null, context.subscriptions);
+		//	Show Force-Directed Graph View
+		WorkspaceVisualizerPanel.show();
+		WorkspaceVisualizerPanel.currentPanel?.showForceDirectedGraph(node);
 	});
 
 	context.subscriptions.push(disposable);
