@@ -20,4 +20,5 @@ interface Option {
     name: string;
     description: string;
     default: any;
+    required?: boolean;
 }

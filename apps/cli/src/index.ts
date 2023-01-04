@@ -7,7 +7,7 @@ import { commands } from './commands/index.js'; // All commands
 
 // Instantiate JSDOM
 const dom = new JSDOM();
-globalThis.document = dom.window.document;
+globalThis.document = dom.window.document; // Set document to globalThis so that it can be used in the visualization library
 
 // Instantiate program
 const program = new Command();
@@ -29,7 +29,11 @@ commands.forEach(cmd => {
         command.argument(arg.name, arg.description, arg.default)
     })
     cmd.options.forEach(option => {
-        command.option(option.name, option.description, option.default)
+        if (option.required) {
+            command.requiredOption(option.name, option.description, option.default)
+        } else {
+            command.option(option.name, option.description, option.default)
+        }
     })
 
     // Add action handlers
