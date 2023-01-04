@@ -51,7 +51,8 @@ export class Node {
     type: NodeType;
     /** The node path */
     path: string;
-    // TODO: Add the size property
+    /** The node size */
+    size: number;
     /** The node creation time */
     createdAt: number;
     /** The node access time */
@@ -82,6 +83,7 @@ export class Node {
         // Set properties
         this.name = path.basename(this.path);
         this.type = determineNodeType(stats) || NodeType.File;
+        this.size = stats.size;
         this.createdAt = stats.birthtimeMs;
         this.accessedAt = stats.atimeMs;
         this.modifiedAt = stats.mtimeMs;
