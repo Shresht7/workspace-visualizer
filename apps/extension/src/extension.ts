@@ -17,10 +17,21 @@ export function activate(context: vscode.ExtensionContext) {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from vscode-workspace-visualizer!');
+
+		//	Create and show a new webview pane
+		const panel = vscode.window.createWebviewPanel('fstree', 'FSTree', vscode.ViewColumn.One);
+
+		//	Set HTML Content
+		panel.webview.html = "<body>Hello World</body>";
+
+		//	When the panel is disposed
+		panel.onDidDispose(() => {
+			// Do stuff
+		}, null, context.subscriptions);
 	});
 
 	context.subscriptions.push(disposable);
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
