@@ -9,12 +9,14 @@
         },
         "watch": {
             "outputs": [
-                "build/**"
+                "build/**",
+                "dist/**"
             ]
         },
         "test": {
             "outputs": [
-                "build/**"
+                "build/**",
+                "dist/**"
             ]
         }
     }
