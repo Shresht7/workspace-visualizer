@@ -1,7 +1,7 @@
 {
   "name": "@workspace-visualizer/visualization",
   "version": "1.0.0",
-  "description": "",
+  "description": "Helpers to create d3 visualizations of the workspace",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "type": "module",
