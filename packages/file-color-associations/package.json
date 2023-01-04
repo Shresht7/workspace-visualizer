@@ -1,7 +1,7 @@
 {
   "name": "@workspace-visualizer/file-color-associations",
   "version": "1.0.0",
-  "description": "",
+  "description": "File color associations for workspace visualizer",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "type": "module",
