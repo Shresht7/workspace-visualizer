@@ -24,7 +24,7 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
     public static get webviewOptions(): vscode.WebviewOptions {
         return {
             enableScripts: true,
-            localResourceRoots: [vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "view")]
+            localResourceRoots: [vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "views")]
         };
     };
 
@@ -77,11 +77,11 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
         const nonce = getNonce();
 
         const styleUri = this._panel.webview.asWebviewUri(
-            vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "view", "style.css")
+            vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "views", "style.css")
         );
 
         const scriptUri = this._panel.webview.asWebviewUri(
-            vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "view", "script.js")
+            vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "views", "script.js")
         );
 
         const content = `
