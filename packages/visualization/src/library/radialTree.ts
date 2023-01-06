@@ -8,13 +8,13 @@ import type { Node } from '@workspace-visualizer/fs-tree'
 // TYPE DEFINITIONS
 // ----------------
 
-/** Options to customize the radial-tree-graph SVG */
+/** Options to customize the radial-tree SVG */
 export interface RadialGraphOptions {
 
     // SVG Options
     // -----------
 
-    /** Margins around the radial-tree-graph */
+    /** Margins around the radial-tree */
     marginTop: number,
     marginRight: number,
     marginBottom: number,
@@ -62,7 +62,7 @@ export interface RadialGraphOptions {
 // DEFAULT OPTIONS
 // ---------------
 
-/** Default options for the radial-tree-graph SVG */
+/** Default options for the radial-tree SVG */
 const defaultOptions: RadialGraphOptions = {
     // SVG options
     marginTop: 10,
@@ -98,7 +98,7 @@ const defaultOptions: RadialGraphOptions = {
 /**
  * Generate a radial tree graph
  * @param root Root node of the tree
- * @param opts Options to customize the radial tree graph
+ * @param opts Options to customize the radial tree
  * @returns SVGElement
  */
 export async function generateRadialTree(root: Node, opts: Partial<RadialGraphOptions> = defaultOptions): Promise<SVGElement | null> {

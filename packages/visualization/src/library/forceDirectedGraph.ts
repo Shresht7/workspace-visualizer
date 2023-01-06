@@ -8,7 +8,7 @@ import type { Node } from '@workspace-visualizer/fs-tree'
 // TYPE DEFINITIONS
 // ----------------
 
-/** Options to customize the force-directed-tree-graph SVG */
+/** Options to customize the force-directed-graph SVG */
 export interface ForceDirectedGraphOptions {
 
     // SVG Options
@@ -18,18 +18,18 @@ export interface ForceDirectedGraphOptions {
     width: number,
     /** Height of the SVG output */
     height: number,
-    /** Margins around the force-directed-tree-graph */
+    /** Margins around the force-directed-graph */
     marginTop: number,
     marginRight: number,
     marginBottom: number,
     marginLeft: number,
 
-    // Force Directed Tree Options
-    // ---------------------------
+    // Force Directed Graph Options
+    // ----------------------------
 
-    /** X position of the center of the force-directed-tree */
+    /** X position of the center of the force-directed-graph */
     centerX: number,
-    /** Y position of the center of the force-directed-tree */
+    /** Y position of the center of the force-directed-graph */
     centerY: number,
     /** Strength of the links */
     linkStrength: number | ((d: d3.HierarchyPointLink<Node>) => number),
@@ -86,7 +86,7 @@ const defaultOptions: ForceDirectedGraphOptions = {
     marginBottom: 0,
     marginLeft: 0,
 
-    // Force Directed Tree Options
+    // Force Directed Graph Options
     centerX: 200, // Half of the width
     centerY: 200, // Half of the height
     linkStrength: 1,
@@ -120,7 +120,7 @@ const defaultOptions: ForceDirectedGraphOptions = {
  * @param options Options
  * @returns SVGElement
  */
-export async function generateForceDirectedTreeGraph(root: Node, opts: Partial<ForceDirectedGraphOptions> = defaultOptions): Promise<SVGElement | null> {
+export async function generateForceDirectedGraph(root: Node, opts: Partial<ForceDirectedGraphOptions> = defaultOptions): Promise<SVGElement | null> {
 
     // Merge options with defaults
     const options = { ...defaultOptions, ...opts } as ForceDirectedGraphOptions
