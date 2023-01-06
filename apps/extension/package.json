@@ -3,6 +3,7 @@
   "displayName": "vscode-workspace-visualizer",
   "description": "Visualize your workspace",
   "version": "0.0.1",
+  "type": "module",
   "engines": {
     "vscode": "^1.74.0"
   },
