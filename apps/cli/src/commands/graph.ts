@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync } from "node:fs"; // Read and write files
 import { extname } from "node:path"; // Get the extension of a file path
 import { snapshot } from "@workspace-visualizer/fs-tree"; // Create a tree of your workspace
-import { generateForceDirectedTreeGraph, ForceDirectedGraphOptions } from "@workspace-visualizer/visualization"; // Generate a graph of your workspace
+import { generateForceDirectedGraph, ForceDirectedGraphOptions } from "@workspace-visualizer/visualization"; // Generate a graph of your workspace
 
 // Helpers
 import { getExtensionColor } from "@workspace-visualizer/file-color-associations"; // Assigns colors to file extensions
@@ -150,7 +150,7 @@ const command: Command<Graph> = {
         }
 
         // Generate the graph
-        const svg = await generateForceDirectedTreeGraph(root, {
+        const svg = await generateForceDirectedGraph(root, {
             // Set the node force of repulsion based on the file size
             nodeForce: (d) => -(d as Node).size,
             // Set the stroke color of the links and nodes based on the file extension
