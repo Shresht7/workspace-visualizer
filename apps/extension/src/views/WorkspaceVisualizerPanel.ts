@@ -11,6 +11,7 @@ import { getNonce } from '../helpers';
 
 /** The Singleton class to represent the Workspace-Visualizer Webview Panel */
 export class WorkspaceVisualizerPanel extends WebviewPanel {
+
     /** Track the current panel. Only allow a single panel to exist at a time */
     public static currentPanel: WorkspaceVisualizerPanel | undefined;
 
@@ -20,6 +21,7 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
     public static readonly viewType = "workspace-visualizer";
     /** Extension path */
     public static extensionUri: vscode.Uri;
+
     /** Settings for the webview panel */
     public static get webviewOptions(): vscode.WebviewOptions {
         return {
@@ -74,7 +76,6 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
 
     /** Update the HTML Content */
     private async update() {
-        const nonce = getNonce();
 
         const styleUri = this._panel.webview.asWebviewUri(
             vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "src", "views", "style.css")
@@ -90,9 +91,9 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none';style-src ${this._panel.webview.cspSource}; img-src ${this._panel.webview.cspSource} https:; script-src 'nonce-${nonce}';" />
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none';style-src ${this._panel.webview.cspSource}; img-src ${this._panel.webview.cspSource} https:; script-src 'nonce-${getNonce()}';" />
 				<link rel="stylesheet" href="${styleUri}" />
-				<script type="module" src="${scriptUri}" nonce="${nonce}"></script>
+				<script type="module" src="${scriptUri}" nonce="${getNonce()}"></script>
 				<title>Document</title>
 			</head>
 			<body>
