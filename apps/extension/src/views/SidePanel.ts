@@ -63,11 +63,11 @@ export class SideViewProvider implements vscode.WebviewViewProvider {
         const nonce = getNonce();
 
         const styleUri = this._view.asWebviewUri(
-            vscode.Uri.joinPath(this._extensionUri, "src", "views", "style.css")
+            vscode.Uri.joinPath(this._extensionUri, "media", "style.css")
         );
 
         const scriptUri = this._view.asWebviewUri(
-            vscode.Uri.joinPath(this._extensionUri, "src", "views", "script.js")
+            vscode.Uri.joinPath(this._extensionUri, "media", "script.js")
         );
 
         const content = `
