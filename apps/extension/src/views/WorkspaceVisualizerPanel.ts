@@ -21,7 +21,6 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
     public static readonly viewType = "workspace-visualizer";
     /** Extension path */
     public static extensionUri: vscode.Uri;
-
     /** Settings for the webview panel */
     public static get webviewOptions(): vscode.WebviewOptions {
         return {
@@ -84,6 +83,7 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
         const scriptUri = this._panel.webview.asWebviewUri(
             vscode.Uri.joinPath(WorkspaceVisualizerPanel.extensionUri, "media", "script.js")
         );
+        const nonce = getNonce(); //  Generate a nonce to whitelist which scripts can be run
 
         const content = `
 			<!DOCTYPE html>
@@ -91,9 +91,9 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
 			<head>
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none';style-src ${this._panel.webview.cspSource}; img-src ${this._panel.webview.cspSource} https:; script-src 'nonce-${getNonce()}';" />
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none';style-src ${this._panel.webview.cspSource}; img-src ${this._panel.webview.cspSource} https:; script-src 'nonce-${nonce}';" />
 				<link rel="stylesheet" href="${styleUri}" />
-				<script type="module" src="${scriptUri}" nonce="${getNonce()}"></script>
+				<script type="module" src="${scriptUri}" nonce="${nonce}"></script>
 				<title>Document</title>
 			</head>
 			<body>
