@@ -7,12 +7,12 @@ import { Node } from '../class/Node';
 import { WorkspaceVisualizerPanel } from '../views/WorkspaceVisualizerPanel';
 
 
-// -------------------------
-// SHOW FORCE DIRECTED GRAPH
-// -------------------------
+// ----------------------
+// SHOW RADIAL TREE GRAPH
+// ----------------------
 
-/** Show workspace visualization (force-directed graph) in the webview */
-export async function showForceDirectedGraph() {
+/** Show workspace visualization (radial tree) in the webview */
+export async function showRadialTree() {
 
     // Get the current workspace
     const workspaceUri = vscode.workspace.workspaceFolders?.[0].uri;

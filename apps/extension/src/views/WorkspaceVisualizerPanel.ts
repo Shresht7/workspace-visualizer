@@ -109,4 +109,10 @@ export class WorkspaceVisualizerPanel extends WebviewPanel {
         this._panel.webview.postMessage({ type: "force-directed-graph", payload: tree });
     }
 
+    /** Show the Radial Tree */
+    public async showRadialTree(tree: Object) {
+        this.update();
+        this._panel.webview.postMessage({ type: "radial-tree", payload: tree });
+    }
+
 }

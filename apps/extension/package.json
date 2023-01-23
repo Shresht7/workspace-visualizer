@@ -26,8 +26,12 @@
     },
     "commands": [
       {
-        "command": "vscode-workspace-visualizer.show-force-directed-graph",
+        "command": "workspace-visualizer.show-force-directed-graph",
         "title": "Show Force Directed Graph"
+      },
+      {
+        "command": "workspace-visualizer.show-radial-tree",
+        "title": "Show Radial Tree"
       }
     ]
   },
