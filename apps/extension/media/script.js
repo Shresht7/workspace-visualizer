@@ -3973,6 +3973,7 @@
         break;
       case "radial-tree":
         generateRadialTree(message.payload);
+        break;
       default:
         break;
     }

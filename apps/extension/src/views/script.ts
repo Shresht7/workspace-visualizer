@@ -10,6 +10,7 @@ window.addEventListener('message', (event) => {
             break;
         case 'radial-tree':
             generateRadialTree(message.payload);
+            break;
         default:
             break;
     }
