@@ -1,7 +1,7 @@
 {
   "name": "@workspace-visualizer/fs-tree",
   "version": "1.0.0",
-  "description": "",
+  "description": "Represent the file system as a tree",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "type": "module",
