@@ -34,7 +34,9 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "build": "npm run compile",
+    "build:extension": "npm run compile",
+    "build:script": "esbuild ./src/views/script.ts --bundle --outfile=./media/script.js",
+    "build": "npm run build:extension && npm run build:script",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
@@ -47,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
     "@vscode/test-electron": "^2.2.0",
+    "esbuild": "^0.17.4",
     "eslint": "^8.28.0",
     "glob": "^8.0.3",
     "mocha": "^10.1.0"
