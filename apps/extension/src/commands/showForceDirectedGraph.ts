@@ -33,5 +33,5 @@ export async function showForceDirectedGraph() {
 
     //	Show Force-Directed Graph View
     WorkspaceVisualizerPanel.show();
-    WorkspaceVisualizerPanel.currentPanel?.showRadialTree(node);
+    WorkspaceVisualizerPanel.currentPanel?.showForceDirectedGraph(node);
 };
