@@ -153,8 +153,8 @@
   }
 
   // ../../node_modules/d3-selection/src/array.js
-  function array(x2) {
-    return x2 == null ? [] : Array.isArray(x2) ? x2 : Array.from(x2);
+  function array(x3) {
+    return x3 == null ? [] : Array.isArray(x3) ? x3 : Array.from(x3);
   }
 
   // ../../node_modules/d3-selection/src/selectorAll.js
@@ -276,9 +276,9 @@
   };
 
   // ../../node_modules/d3-selection/src/constant.js
-  function constant_default(x2) {
+  function constant_default(x3) {
     return function() {
-      return x2;
+      return x3;
     };
   }
 
@@ -1311,7 +1311,7 @@
   }
 
   // ../../node_modules/d3-interpolate/src/constant.js
-  var constant_default2 = (x2) => () => x2;
+  var constant_default2 = (x3) => () => x3;
 
   // ../../node_modules/d3-interpolate/src/color.js
   function linear(a2, d) {
@@ -1319,14 +1319,14 @@
       return a2 + t * d;
     };
   }
-  function exponential(a2, b, y2) {
-    return a2 = Math.pow(a2, y2), b = Math.pow(b, y2) - a2, y2 = 1 / y2, function(t) {
-      return Math.pow(a2 + t * b, y2);
+  function exponential(a2, b, y3) {
+    return a2 = Math.pow(a2, y3), b = Math.pow(b, y3) - a2, y3 = 1 / y3, function(t) {
+      return Math.pow(a2 + t * b, y3);
     };
   }
-  function gamma(y2) {
-    return (y2 = +y2) === 1 ? nogamma : function(a2, b) {
-      return b - a2 ? exponential(a2, b, y2) : constant_default2(isNaN(a2) ? b : a2);
+  function gamma(y3) {
+    return (y3 = +y3) === 1 ? nogamma : function(a2, b) {
+      return b - a2 ? exponential(a2, b, y3) : constant_default2(isNaN(a2) ? b : a2);
     };
   }
   function nogamma(a2, b) {
@@ -1335,8 +1335,8 @@
   }
 
   // ../../node_modules/d3-interpolate/src/rgb.js
-  var rgb_default = function rgbGamma(y2) {
-    var color2 = gamma(y2);
+  var rgb_default = function rgbGamma(y3) {
+    var color2 = gamma(y3);
     function rgb2(start2, end) {
       var r = color2((start2 = rgb(start2)).r, (end = rgb(end)).r), g = color2(start2.g, end.g), b = color2(start2.b, end.b), opacity = nogamma(start2.opacity, end.opacity);
       return function(t) {
@@ -2409,8 +2409,8 @@
   var X = {
     name: "x",
     handles: ["w", "e"].map(type),
-    input: function(x2, e) {
-      return x2 == null ? null : [[+x2[0], e[0][1]], [+x2[1], e[1][1]]];
+    input: function(x3, e) {
+      return x3 == null ? null : [[+x3[0], e[0][1]], [+x3[1], e[1][1]]];
     },
     output: function(xy) {
       return xy && [xy[0][0], xy[1][0]];
@@ -2419,8 +2419,8 @@
   var Y = {
     name: "y",
     handles: ["n", "s"].map(type),
-    input: function(y2, e) {
-      return y2 == null ? null : [[e[0][0], +y2[0]], [e[1][0], +y2[1]]];
+    input: function(y3, e) {
+      return y3 == null ? null : [[e[0][0], +y3[0]], [e[1][0], +y3[1]]];
     },
     output: function(xy) {
       return xy && [xy[0][1], xy[1][1]];
@@ -2440,19 +2440,120 @@
     return { type: t };
   }
 
+  // ../../node_modules/d3-path/src/path.js
+  var pi = Math.PI;
+  var tau = 2 * pi;
+  var epsilon = 1e-6;
+  var tauEpsilon = tau - epsilon;
+  function append(strings) {
+    this._ += strings[0];
+    for (let i = 1, n = strings.length; i < n; ++i) {
+      this._ += arguments[i] + strings[i];
+    }
+  }
+  function appendRound(digits) {
+    let d = Math.floor(digits);
+    if (!(d >= 0))
+      throw new Error(`invalid digits: ${digits}`);
+    if (d > 15)
+      return append;
+    const k = 10 ** d;
+    return function(strings) {
+      this._ += strings[0];
+      for (let i = 1, n = strings.length; i < n; ++i) {
+        this._ += Math.round(arguments[i] * k) / k + strings[i];
+      }
+    };
+  }
+  var Path = class {
+    constructor(digits) {
+      this._x0 = this._y0 = // start of current subpath
+      this._x1 = this._y1 = null;
+      this._ = "";
+      this._append = digits == null ? append : appendRound(digits);
+    }
+    moveTo(x3, y3) {
+      this._append`M${this._x0 = this._x1 = +x3},${this._y0 = this._y1 = +y3}`;
+    }
+    closePath() {
+      if (this._x1 !== null) {
+        this._x1 = this._x0, this._y1 = this._y0;
+        this._append`Z`;
+      }
+    }
+    lineTo(x3, y3) {
+      this._append`L${this._x1 = +x3},${this._y1 = +y3}`;
+    }
+    quadraticCurveTo(x1, y1, x3, y3) {
+      this._append`Q${+x1},${+y1},${this._x1 = +x3},${this._y1 = +y3}`;
+    }
+    bezierCurveTo(x1, y1, x22, y22, x3, y3) {
+      this._append`C${+x1},${+y1},${+x22},${+y22},${this._x1 = +x3},${this._y1 = +y3}`;
+    }
+    arcTo(x1, y1, x22, y22, r) {
+      x1 = +x1, y1 = +y1, x22 = +x22, y22 = +y22, r = +r;
+      if (r < 0)
+        throw new Error(`negative radius: ${r}`);
+      let x0 = this._x1, y0 = this._y1, x21 = x22 - x1, y21 = y22 - y1, x01 = x0 - x1, y01 = y0 - y1, l01_2 = x01 * x01 + y01 * y01;
+      if (this._x1 === null) {
+        this._append`M${this._x1 = x1},${this._y1 = y1}`;
+      } else if (!(l01_2 > epsilon))
+        ;
+      else if (!(Math.abs(y01 * x21 - y21 * x01) > epsilon) || !r) {
+        this._append`L${this._x1 = x1},${this._y1 = y1}`;
+      } else {
+        let x20 = x22 - x0, y20 = y22 - y0, l21_2 = x21 * x21 + y21 * y21, l20_2 = x20 * x20 + y20 * y20, l21 = Math.sqrt(l21_2), l01 = Math.sqrt(l01_2), l = r * Math.tan((pi - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2), t01 = l / l01, t21 = l / l21;
+        if (Math.abs(t01 - 1) > epsilon) {
+          this._append`L${x1 + t01 * x01},${y1 + t01 * y01}`;
+        }
+        this._append`A${r},${r},0,0,${+(y01 * x20 > x01 * y20)},${this._x1 = x1 + t21 * x21},${this._y1 = y1 + t21 * y21}`;
+      }
+    }
+    arc(x3, y3, r, a0, a1, ccw) {
+      x3 = +x3, y3 = +y3, r = +r, ccw = !!ccw;
+      if (r < 0)
+        throw new Error(`negative radius: ${r}`);
+      let dx = r * Math.cos(a0), dy = r * Math.sin(a0), x0 = x3 + dx, y0 = y3 + dy, cw = 1 ^ ccw, da = ccw ? a0 - a1 : a1 - a0;
+      if (this._x1 === null) {
+        this._append`M${x0},${y0}`;
+      } else if (Math.abs(this._x1 - x0) > epsilon || Math.abs(this._y1 - y0) > epsilon) {
+        this._append`L${x0},${y0}`;
+      }
+      if (!r)
+        return;
+      if (da < 0)
+        da = da % tau + tau;
+      if (da > tauEpsilon) {
+        this._append`A${r},${r},0,1,${cw},${x3 - dx},${y3 - dy}A${r},${r},0,1,${cw},${this._x1 = x0},${this._y1 = y0}`;
+      } else if (da > epsilon) {
+        this._append`A${r},${r},0,${+(da >= pi)},${cw},${this._x1 = x3 + r * Math.cos(a1)},${this._y1 = y3 + r * Math.sin(a1)}`;
+      }
+    }
+    rect(x3, y3, w, h) {
+      this._append`M${this._x0 = this._x1 = +x3},${this._y0 = this._y1 = +y3}h${w = +w}v${+h}h${-w}Z`;
+    }
+    toString() {
+      return this._;
+    }
+  };
+  function path() {
+    return new Path();
+  }
+  path.prototype = Path.prototype;
+
   // ../../node_modules/d3-force/src/center.js
-  function center_default(x2, y2) {
+  function center_default(x3, y3) {
     var nodes, strength = 1;
-    if (x2 == null)
-      x2 = 0;
-    if (y2 == null)
-      y2 = 0;
+    if (x3 == null)
+      x3 = 0;
+    if (y3 == null)
+      y3 = 0;
     function force() {
       var i, n = nodes.length, node, sx = 0, sy = 0;
       for (i = 0; i < n; ++i) {
         node = nodes[i], sx += node.x, sy += node.y;
       }
-      for (sx = (sx / n - x2) * strength, sy = (sy / n - y2) * strength, i = 0; i < n; ++i) {
+      for (sx = (sx / n - x3) * strength, sy = (sy / n - y3) * strength, i = 0; i < n; ++i) {
         node = nodes[i], node.x -= sx, node.y -= sy;
       }
     }
@@ -2460,10 +2561,10 @@
       nodes = _;
     };
     force.x = function(_) {
-      return arguments.length ? (x2 = +_, force) : x2;
+      return arguments.length ? (x3 = +_, force) : x3;
     };
     force.y = function(_) {
-      return arguments.length ? (y2 = +_, force) : y2;
+      return arguments.length ? (y3 = +_, force) : y3;
     };
     force.strength = function(_) {
       return arguments.length ? (strength = +_, force) : strength;
@@ -2473,21 +2574,21 @@
 
   // ../../node_modules/d3-quadtree/src/add.js
   function add_default(d) {
-    const x2 = +this._x.call(null, d), y2 = +this._y.call(null, d);
-    return add(this.cover(x2, y2), x2, y2, d);
+    const x3 = +this._x.call(null, d), y3 = +this._y.call(null, d);
+    return add(this.cover(x3, y3), x3, y3, d);
   }
-  function add(tree, x2, y2, d) {
-    if (isNaN(x2) || isNaN(y2))
+  function add(tree, x3, y3, d) {
+    if (isNaN(x3) || isNaN(y3))
       return tree;
     var parent, node = tree._root, leaf = { data: d }, x0 = tree._x0, y0 = tree._y0, x1 = tree._x1, y1 = tree._y1, xm, ym, xp, yp, right, bottom, i, j;
     if (!node)
       return tree._root = leaf, tree;
     while (node.length) {
-      if (right = x2 >= (xm = (x0 + x1) / 2))
+      if (right = x3 >= (xm = (x0 + x1) / 2))
         x0 = xm;
       else
         x1 = xm;
-      if (bottom = y2 >= (ym = (y0 + y1) / 2))
+      if (bottom = y3 >= (ym = (y0 + y1) / 2))
         y0 = ym;
       else
         y1 = ym;
@@ -2496,15 +2597,15 @@
     }
     xp = +tree._x.call(null, node.data);
     yp = +tree._y.call(null, node.data);
-    if (x2 === xp && y2 === yp)
+    if (x3 === xp && y3 === yp)
       return leaf.next = node, parent ? parent[i] = leaf : tree._root = leaf, tree;
     do {
       parent = parent ? parent[i] = new Array(4) : tree._root = new Array(4);
-      if (right = x2 >= (xm = (x0 + x1) / 2))
+      if (right = x3 >= (xm = (x0 + x1) / 2))
         x0 = xm;
       else
         x1 = xm;
-      if (bottom = y2 >= (ym = (y0 + y1) / 2))
+      if (bottom = y3 >= (ym = (y0 + y1) / 2))
         y0 = ym;
       else
         y1 = ym;
@@ -2512,20 +2613,20 @@
     return parent[j] = node, parent[i] = leaf, tree;
   }
   function addAll(data) {
-    var d, i, n = data.length, x2, y2, xz = new Array(n), yz = new Array(n), x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    var d, i, n = data.length, x3, y3, xz = new Array(n), yz = new Array(n), x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     for (i = 0; i < n; ++i) {
-      if (isNaN(x2 = +this._x.call(null, d = data[i])) || isNaN(y2 = +this._y.call(null, d)))
+      if (isNaN(x3 = +this._x.call(null, d = data[i])) || isNaN(y3 = +this._y.call(null, d)))
         continue;
-      xz[i] = x2;
-      yz[i] = y2;
-      if (x2 < x0)
-        x0 = x2;
-      if (x2 > x1)
-        x1 = x2;
-      if (y2 < y0)
-        y0 = y2;
-      if (y2 > y1)
-        y1 = y2;
+      xz[i] = x3;
+      yz[i] = y3;
+      if (x3 < x0)
+        x0 = x3;
+      if (x3 > x1)
+        x1 = x3;
+      if (y3 < y0)
+        y0 = y3;
+      if (y3 > y1)
+        y1 = y3;
     }
     if (x0 > x1 || y0 > y1)
       return this;
@@ -2537,17 +2638,17 @@
   }
 
   // ../../node_modules/d3-quadtree/src/cover.js
-  function cover_default(x2, y2) {
-    if (isNaN(x2 = +x2) || isNaN(y2 = +y2))
+  function cover_default(x3, y3) {
+    if (isNaN(x3 = +x3) || isNaN(y3 = +y3))
       return this;
     var x0 = this._x0, y0 = this._y0, x1 = this._x1, y1 = this._y1;
     if (isNaN(x0)) {
-      x1 = (x0 = Math.floor(x2)) + 1;
-      y1 = (y0 = Math.floor(y2)) + 1;
+      x1 = (x0 = Math.floor(x3)) + 1;
+      y1 = (y0 = Math.floor(y3)) + 1;
     } else {
       var z = x1 - x0 || 1, node = this._root, parent, i;
-      while (x0 > x2 || x2 >= x1 || y0 > y2 || y2 >= y1) {
-        i = (y2 < y0) << 1 | x2 < x0;
+      while (x0 > x3 || x3 >= x1 || y0 > y3 || y3 >= y1) {
+        i = (y3 < y0) << 1 | x3 < x0;
         parent = new Array(4), parent[i] = node, node = parent, z *= 2;
         switch (i) {
           case 0:
@@ -2601,19 +2702,19 @@
   }
 
   // ../../node_modules/d3-quadtree/src/find.js
-  function find_default(x2, y2, radius) {
-    var data, x0 = this._x0, y0 = this._y0, x1, y1, x22, y22, x3 = this._x1, y3 = this._y1, quads = [], node = this._root, q, i;
+  function find_default(x3, y3, radius) {
+    var data, x0 = this._x0, y0 = this._y0, x1, y1, x22, y22, x32 = this._x1, y32 = this._y1, quads = [], node = this._root, q, i;
     if (node)
-      quads.push(new quad_default(node, x0, y0, x3, y3));
+      quads.push(new quad_default(node, x0, y0, x32, y32));
     if (radius == null)
       radius = Infinity;
     else {
-      x0 = x2 - radius, y0 = y2 - radius;
-      x3 = x2 + radius, y3 = y2 + radius;
+      x0 = x3 - radius, y0 = y3 - radius;
+      x32 = x3 + radius, y32 = y3 + radius;
       radius *= radius;
     }
     while (q = quads.pop()) {
-      if (!(node = q.node) || (x1 = q.x0) > x3 || (y1 = q.y0) > y3 || (x22 = q.x1) < x0 || (y22 = q.y1) < y0)
+      if (!(node = q.node) || (x1 = q.x0) > x32 || (y1 = q.y0) > y32 || (x22 = q.x1) < x0 || (y22 = q.y1) < y0)
         continue;
       if (node.length) {
         var xm = (x1 + x22) / 2, ym = (y1 + y22) / 2;
@@ -2623,17 +2724,17 @@
           new quad_default(node[1], xm, y1, x22, ym),
           new quad_default(node[0], x1, y1, xm, ym)
         );
-        if (i = (y2 >= ym) << 1 | x2 >= xm) {
+        if (i = (y3 >= ym) << 1 | x3 >= xm) {
           q = quads[quads.length - 1];
           quads[quads.length - 1] = quads[quads.length - 1 - i];
           quads[quads.length - 1 - i] = q;
         }
       } else {
-        var dx = x2 - +this._x.call(null, node.data), dy = y2 - +this._y.call(null, node.data), d2 = dx * dx + dy * dy;
+        var dx = x3 - +this._x.call(null, node.data), dy = y3 - +this._y.call(null, node.data), d2 = dx * dx + dy * dy;
         if (d2 < radius) {
           var d = Math.sqrt(radius = d2);
-          x0 = x2 - d, y0 = y2 - d;
-          x3 = x2 + d, y3 = y2 + d;
+          x0 = x3 - d, y0 = y3 - d;
+          x32 = x3 + d, y32 = y3 + d;
           data = node.data;
         }
       }
@@ -2643,18 +2744,18 @@
 
   // ../../node_modules/d3-quadtree/src/remove.js
   function remove_default3(d) {
-    if (isNaN(x2 = +this._x.call(null, d)) || isNaN(y2 = +this._y.call(null, d)))
+    if (isNaN(x3 = +this._x.call(null, d)) || isNaN(y3 = +this._y.call(null, d)))
       return this;
-    var parent, node = this._root, retainer, previous, next, x0 = this._x0, y0 = this._y0, x1 = this._x1, y1 = this._y1, x2, y2, xm, ym, right, bottom, i, j;
+    var parent, node = this._root, retainer, previous, next, x0 = this._x0, y0 = this._y0, x1 = this._x1, y1 = this._y1, x3, y3, xm, ym, right, bottom, i, j;
     if (!node)
       return this;
     if (node.length)
       while (true) {
-        if (right = x2 >= (xm = (x0 + x1) / 2))
+        if (right = x3 >= (xm = (x0 + x1) / 2))
           x0 = xm;
         else
           x1 = xm;
-        if (bottom = y2 >= (ym = (y0 + y1) / 2))
+        if (bottom = y3 >= (ym = (y0 + y1) / 2))
           y0 = ym;
         else
           y1 = ym;
@@ -2770,13 +2871,13 @@
   }
 
   // ../../node_modules/d3-quadtree/src/quadtree.js
-  function quadtree(nodes, x2, y2) {
-    var tree = new Quadtree(x2 == null ? defaultX : x2, y2 == null ? defaultY : y2, NaN, NaN, NaN, NaN);
+  function quadtree(nodes, x3, y3) {
+    var tree = new Quadtree(x3 == null ? defaultX : x3, y3 == null ? defaultY : y3, NaN, NaN, NaN, NaN);
     return nodes == null ? tree : tree.addAll(nodes);
   }
-  function Quadtree(x2, y2, x0, y0, x1, y1) {
-    this._x = x2;
-    this._y = y2;
+  function Quadtree(x3, y3, x0, y0, x1, y1) {
+    this._x = x3;
+    this._y = y3;
     this._x0 = x0;
     this._y0 = y0;
     this._x1 = x1;
@@ -2825,9 +2926,9 @@
   treeProto.y = y_default;
 
   // ../../node_modules/d3-force/src/constant.js
-  function constant_default4(x2) {
+  function constant_default4(x3) {
     return function() {
-      return x2;
+      return x3;
     };
   }
 
@@ -2850,40 +2951,40 @@
     var id2 = index, strength = defaultStrength, strengths, distance = constant_default4(30), distances, nodes, count2, bias, random, iterations = 1;
     if (links == null)
       links = [];
-    function defaultStrength(link) {
-      return 1 / Math.min(count2[link.source.index], count2[link.target.index]);
+    function defaultStrength(link2) {
+      return 1 / Math.min(count2[link2.source.index], count2[link2.target.index]);
     }
     function force(alpha) {
       for (var k = 0, n = links.length; k < iterations; ++k) {
-        for (var i = 0, link, source, target, x2, y2, l, b; i < n; ++i) {
-          link = links[i], source = link.source, target = link.target;
-          x2 = target.x + target.vx - source.x - source.vx || jiggle_default(random);
-          y2 = target.y + target.vy - source.y - source.vy || jiggle_default(random);
-          l = Math.sqrt(x2 * x2 + y2 * y2);
+        for (var i = 0, link2, source, target, x3, y3, l, b; i < n; ++i) {
+          link2 = links[i], source = link2.source, target = link2.target;
+          x3 = target.x + target.vx - source.x - source.vx || jiggle_default(random);
+          y3 = target.y + target.vy - source.y - source.vy || jiggle_default(random);
+          l = Math.sqrt(x3 * x3 + y3 * y3);
           l = (l - distances[i]) / l * alpha * strengths[i];
-          x2 *= l, y2 *= l;
-          target.vx -= x2 * (b = bias[i]);
-          target.vy -= y2 * b;
-          source.vx += x2 * (b = 1 - b);
-          source.vy += y2 * b;
+          x3 *= l, y3 *= l;
+          target.vx -= x3 * (b = bias[i]);
+          target.vy -= y3 * b;
+          source.vx += x3 * (b = 1 - b);
+          source.vy += y3 * b;
         }
       }
     }
     function initialize() {
       if (!nodes)
         return;
-      var i, n = nodes.length, m2 = links.length, nodeById = new Map(nodes.map((d, i2) => [id2(d, i2, nodes), d])), link;
+      var i, n = nodes.length, m2 = links.length, nodeById = new Map(nodes.map((d, i2) => [id2(d, i2, nodes), d])), link2;
       for (i = 0, count2 = new Array(n); i < m2; ++i) {
-        link = links[i], link.index = i;
-        if (typeof link.source !== "object")
-          link.source = find2(nodeById, link.source);
-        if (typeof link.target !== "object")
-          link.target = find2(nodeById, link.target);
-        count2[link.source.index] = (count2[link.source.index] || 0) + 1;
-        count2[link.target.index] = (count2[link.target.index] || 0) + 1;
+        link2 = links[i], link2.index = i;
+        if (typeof link2.source !== "object")
+          link2.source = find2(nodeById, link2.source);
+        if (typeof link2.target !== "object")
+          link2.target = find2(nodeById, link2.target);
+        count2[link2.source.index] = (count2[link2.source.index] || 0) + 1;
+        count2[link2.target.index] = (count2[link2.target.index] || 0) + 1;
       }
       for (i = 0, bias = new Array(m2); i < m2; ++i) {
-        link = links[i], bias[i] = count2[link.source.index] / (count2[link.source.index] + count2[link.target.index]);
+        link2 = links[i], bias[i] = count2[link2.source.index] / (count2[link2.source.index] + count2[link2.target.index]);
       }
       strengths = new Array(m2), initializeStrength();
       distances = new Array(m2), initializeDistance();
@@ -3033,7 +3134,7 @@
       force: function(name, _) {
         return arguments.length > 1 ? (_ == null ? forces.delete(name) : forces.set(name, initializeForce(_)), simulation) : forces.get(name);
       },
-      find: function(x2, y2, radius) {
+      find: function(x3, y3, radius) {
         var i = 0, n = nodes.length, dx, dy, d2, node, closest;
         if (radius == null)
           radius = Infinity;
@@ -3041,8 +3142,8 @@
           radius *= radius;
         for (i = 0; i < n; ++i) {
           node = nodes[i];
-          dx = x2 - node.x;
-          dy = y2 - node.y;
+          dx = x3 - node.x;
+          dy = y3 - node.y;
           d2 = dx * dx + dy * dy;
           if (d2 < radius)
             closest = node, radius = d2;
@@ -3072,15 +3173,15 @@
         node2 = nodes[i], strengths[node2.index] = +strength(node2, i, nodes);
     }
     function accumulate(quad) {
-      var strength2 = 0, q, c2, weight = 0, x2, y2, i;
+      var strength2 = 0, q, c2, weight = 0, x3, y3, i;
       if (quad.length) {
-        for (x2 = y2 = i = 0; i < 4; ++i) {
+        for (x3 = y3 = i = 0; i < 4; ++i) {
           if ((q = quad[i]) && (c2 = Math.abs(q.value))) {
-            strength2 += q.value, weight += c2, x2 += c2 * q.x, y2 += c2 * q.y;
+            strength2 += q.value, weight += c2, x3 += c2 * q.x, y3 += c2 * q.y;
           }
         }
-        quad.x = x2 / weight;
-        quad.y = y2 / weight;
+        quad.x = x3 / weight;
+        quad.y = y3 / weight;
       } else {
         q = quad;
         q.x = q.data.x;
@@ -3091,20 +3192,20 @@
       }
       quad.value = strength2;
     }
-    function apply(quad, x1, _, x2) {
+    function apply(quad, x1, _, x22) {
       if (!quad.value)
         return true;
-      var x3 = quad.x - node.x, y2 = quad.y - node.y, w = x2 - x1, l = x3 * x3 + y2 * y2;
+      var x3 = quad.x - node.x, y3 = quad.y - node.y, w = x22 - x1, l = x3 * x3 + y3 * y3;
       if (w * w / theta2 < l) {
         if (l < distanceMax2) {
           if (x3 === 0)
             x3 = jiggle_default(random), l += x3 * x3;
-          if (y2 === 0)
-            y2 = jiggle_default(random), l += y2 * y2;
+          if (y3 === 0)
+            y3 = jiggle_default(random), l += y3 * y3;
           if (l < distanceMin2)
             l = Math.sqrt(distanceMin2 * l);
           node.vx += x3 * quad.value * alpha / l;
-          node.vy += y2 * quad.value * alpha / l;
+          node.vy += y3 * quad.value * alpha / l;
         }
         return true;
       } else if (quad.length || l >= distanceMax2)
@@ -3112,8 +3213,8 @@
       if (quad.data !== node || quad.next) {
         if (x3 === 0)
           x3 = jiggle_default(random), l += x3 * x3;
-        if (y2 === 0)
-          y2 = jiggle_default(random), l += y2 * y2;
+        if (y3 === 0)
+          y3 = jiggle_default(random), l += y3 * y3;
         if (l < distanceMin2)
           l = Math.sqrt(distanceMin2 * l);
       }
@@ -3121,7 +3222,7 @@
         if (quad.data !== node) {
           w = strengths[quad.data.index] * alpha / l;
           node.vx += x3 * w;
-          node.vy += y2 * w;
+          node.vy += y3 * w;
         }
       while (quad = quad.next);
     }
@@ -3146,10 +3247,10 @@
   }
 
   // ../../node_modules/d3-force/src/x.js
-  function x_default2(x2) {
+  function x_default2(x3) {
     var strength = constant_default4(0.1), nodes, strengths, xz;
-    if (typeof x2 !== "function")
-      x2 = constant_default4(x2 == null ? 0 : +x2);
+    if (typeof x3 !== "function")
+      x3 = constant_default4(x3 == null ? 0 : +x3);
     function force(alpha) {
       for (var i = 0, n = nodes.length, node; i < n; ++i) {
         node = nodes[i], node.vx += (xz[i] - node.x) * strengths[i] * alpha;
@@ -3162,7 +3263,7 @@
       strengths = new Array(n);
       xz = new Array(n);
       for (i = 0; i < n; ++i) {
-        strengths[i] = isNaN(xz[i] = +x2(nodes[i], i, nodes)) ? 0 : +strength(nodes[i], i, nodes);
+        strengths[i] = isNaN(xz[i] = +x3(nodes[i], i, nodes)) ? 0 : +strength(nodes[i], i, nodes);
       }
     }
     force.initialize = function(_) {
@@ -3173,16 +3274,16 @@
       return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default4(+_), initialize(), force) : strength;
     };
     force.x = function(_) {
-      return arguments.length ? (x2 = typeof _ === "function" ? _ : constant_default4(+_), initialize(), force) : x2;
+      return arguments.length ? (x3 = typeof _ === "function" ? _ : constant_default4(+_), initialize(), force) : x3;
     };
     return force;
   }
 
   // ../../node_modules/d3-force/src/y.js
-  function y_default2(y2) {
+  function y_default2(y3) {
     var strength = constant_default4(0.1), nodes, strengths, yz;
-    if (typeof y2 !== "function")
-      y2 = constant_default4(y2 == null ? 0 : +y2);
+    if (typeof y3 !== "function")
+      y3 = constant_default4(y3 == null ? 0 : +y3);
     function force(alpha) {
       for (var i = 0, n = nodes.length, node; i < n; ++i) {
         node = nodes[i], node.vy += (yz[i] - node.y) * strengths[i] * alpha;
@@ -3195,7 +3296,7 @@
       strengths = new Array(n);
       yz = new Array(n);
       for (i = 0; i < n; ++i) {
-        strengths[i] = isNaN(yz[i] = +y2(nodes[i], i, nodes)) ? 0 : +strength(nodes[i], i, nodes);
+        strengths[i] = isNaN(yz[i] = +y3(nodes[i], i, nodes)) ? 0 : +strength(nodes[i], i, nodes);
       }
     }
     force.initialize = function(_) {
@@ -3206,7 +3307,7 @@
       return arguments.length ? (strength = typeof _ === "function" ? _ : constant_default4(+_), initialize(), force) : strength;
     };
     force.y = function(_) {
-      return arguments.length ? (y2 = typeof _ === "function" ? _ : constant_default4(+_), initialize(), force) : y2;
+      return arguments.length ? (y3 = typeof _ === "function" ? _ : constant_default4(+_), initialize(), force) : y3;
     };
     return force;
   }
@@ -3579,55 +3680,173 @@
       node.x *= dx;
       node.y = node.depth * dy;
     }
-    tree.separation = function(x2) {
-      return arguments.length ? (separation = x2, tree) : separation;
+    tree.separation = function(x3) {
+      return arguments.length ? (separation = x3, tree) : separation;
     };
-    tree.size = function(x2) {
-      return arguments.length ? (nodeSize = false, dx = +x2[0], dy = +x2[1], tree) : nodeSize ? null : [dx, dy];
+    tree.size = function(x3) {
+      return arguments.length ? (nodeSize = false, dx = +x3[0], dy = +x3[1], tree) : nodeSize ? null : [dx, dy];
     };
-    tree.nodeSize = function(x2) {
-      return arguments.length ? (nodeSize = true, dx = +x2[0], dy = +x2[1], tree) : nodeSize ? [dx, dy] : null;
+    tree.nodeSize = function(x3) {
+      return arguments.length ? (nodeSize = true, dx = +x3[0], dy = +x3[1], tree) : nodeSize ? [dx, dy] : null;
     };
     return tree;
   }
 
+  // ../../node_modules/d3-shape/src/constant.js
+  function constant_default5(x3) {
+    return function constant() {
+      return x3;
+    };
+  }
+
+  // ../../node_modules/d3-shape/src/path.js
+  function withPath(shape) {
+    let digits = 3;
+    shape.digits = function(_) {
+      if (!arguments.length)
+        return digits;
+      if (_ == null) {
+        digits = null;
+      } else {
+        const d = Math.floor(_);
+        if (!(d >= 0))
+          throw new RangeError(`invalid digits: ${_}`);
+        digits = d;
+      }
+      return shape;
+    };
+    return () => new Path(digits);
+  }
+
+  // ../../node_modules/d3-shape/src/array.js
+  var slice = Array.prototype.slice;
+
+  // ../../node_modules/d3-shape/src/point.js
+  function x2(p) {
+    return p[0];
+  }
+  function y2(p) {
+    return p[1];
+  }
+
+  // ../../node_modules/d3-shape/src/pointRadial.js
+  function pointRadial_default(x3, y3) {
+    return [(y3 = +y3) * Math.cos(x3 -= Math.PI / 2), y3 * Math.sin(x3)];
+  }
+
+  // ../../node_modules/d3-shape/src/curve/bump.js
+  var BumpRadial = class {
+    constructor(context) {
+      this._context = context;
+    }
+    lineStart() {
+      this._point = 0;
+    }
+    lineEnd() {
+    }
+    point(x3, y3) {
+      x3 = +x3, y3 = +y3;
+      if (this._point === 0) {
+        this._point = 1;
+      } else {
+        const p0 = pointRadial_default(this._x0, this._y0);
+        const p1 = pointRadial_default(this._x0, this._y0 = (this._y0 + y3) / 2);
+        const p2 = pointRadial_default(x3, this._y0);
+        const p3 = pointRadial_default(x3, y3);
+        this._context.moveTo(...p0);
+        this._context.bezierCurveTo(...p1, ...p2, ...p3);
+      }
+      this._x0 = x3, this._y0 = y3;
+    }
+  };
+  function bumpRadial(context) {
+    return new BumpRadial(context);
+  }
+
+  // ../../node_modules/d3-shape/src/link.js
+  function linkSource(d) {
+    return d.source;
+  }
+  function linkTarget(d) {
+    return d.target;
+  }
+  function link(curve) {
+    let source = linkSource, target = linkTarget, x3 = x2, y3 = y2, context = null, output = null, path2 = withPath(link2);
+    function link2() {
+      let buffer;
+      const argv = slice.call(arguments);
+      const s = source.apply(this, argv);
+      const t = target.apply(this, argv);
+      if (context == null)
+        output = curve(buffer = path2());
+      output.lineStart();
+      argv[0] = s, output.point(+x3.apply(this, argv), +y3.apply(this, argv));
+      argv[0] = t, output.point(+x3.apply(this, argv), +y3.apply(this, argv));
+      output.lineEnd();
+      if (buffer)
+        return output = null, buffer + "" || null;
+    }
+    link2.source = function(_) {
+      return arguments.length ? (source = _, link2) : source;
+    };
+    link2.target = function(_) {
+      return arguments.length ? (target = _, link2) : target;
+    };
+    link2.x = function(_) {
+      return arguments.length ? (x3 = typeof _ === "function" ? _ : constant_default5(+_), link2) : x3;
+    };
+    link2.y = function(_) {
+      return arguments.length ? (y3 = typeof _ === "function" ? _ : constant_default5(+_), link2) : y3;
+    };
+    link2.context = function(_) {
+      return arguments.length ? (_ == null ? context = output = null : output = curve(context = _), link2) : context;
+    };
+    return link2;
+  }
+  function linkRadial() {
+    const l = link(bumpRadial);
+    l.angle = l.x, delete l.x;
+    l.radius = l.y, delete l.y;
+    return l;
+  }
+
   // ../../node_modules/d3-zoom/src/transform.js
-  function Transform(k, x2, y2) {
+  function Transform(k, x3, y3) {
     this.k = k;
-    this.x = x2;
-    this.y = y2;
+    this.x = x3;
+    this.y = y3;
   }
   Transform.prototype = {
     constructor: Transform,
     scale: function(k) {
       return k === 1 ? this : new Transform(this.k * k, this.x, this.y);
     },
-    translate: function(x2, y2) {
-      return x2 === 0 & y2 === 0 ? this : new Transform(this.k, this.x + this.k * x2, this.y + this.k * y2);
+    translate: function(x3, y3) {
+      return x3 === 0 & y3 === 0 ? this : new Transform(this.k, this.x + this.k * x3, this.y + this.k * y3);
     },
     apply: function(point) {
       return [point[0] * this.k + this.x, point[1] * this.k + this.y];
     },
-    applyX: function(x2) {
-      return x2 * this.k + this.x;
+    applyX: function(x3) {
+      return x3 * this.k + this.x;
     },
-    applyY: function(y2) {
-      return y2 * this.k + this.y;
+    applyY: function(y3) {
+      return y3 * this.k + this.y;
     },
     invert: function(location) {
       return [(location[0] - this.x) / this.k, (location[1] - this.y) / this.k];
     },
-    invertX: function(x2) {
-      return (x2 - this.x) / this.k;
+    invertX: function(x3) {
+      return (x3 - this.x) / this.k;
     },
-    invertY: function(y2) {
-      return (y2 - this.y) / this.k;
+    invertY: function(y3) {
+      return (y3 - this.y) / this.k;
     },
-    rescaleX: function(x2) {
-      return x2.copy().domain(x2.range().map(this.invertX, this).map(x2.invert, x2));
+    rescaleX: function(x3) {
+      return x3.copy().domain(x3.range().map(this.invertX, this).map(x3.invert, x3));
     },
-    rescaleY: function(y2) {
-      return y2.copy().domain(y2.range().map(this.invertY, this).map(y2.invert, y2));
+    rescaleY: function(y3) {
+      return y3.copy().domain(y3.range().map(this.invertY, this).map(y3.invert, y3));
     },
     toString: function() {
       return "translate(" + this.x + "," + this.y + ") scale(" + this.k + ")";
@@ -3686,11 +3905,11 @@
     const descendants = nodes.descendants();
     const links = nodes.links();
     const simulation = simulation_default(descendants).force("center", center_default(options.centerX, options.centerY)).force("charge", manyBody_default().strength(options.nodeForce)).force("x", x_default2()).force("y", y_default2()).force("link", link_default(links).id((d) => d.path).strength(options.linkStrength).distance(options.linkDistance));
-    const link = svg.append("g").selectAll("line").data(links).join("line").attr("stroke", options.linkStroke).attr("stroke-opacity", options.linkStrokeOpacity).attr("stroke-linecap", options.linkStrokeLineCap).attr("stroke-linejoin", options.linkStrokeLineJoin).attr("stroke-width", options.linkStrokeWidth);
+    const link2 = svg.append("g").selectAll("line").data(links).join("line").attr("stroke", options.linkStroke).attr("stroke-opacity", options.linkStrokeOpacity).attr("stroke-linecap", options.linkStrokeLineCap).attr("stroke-linejoin", options.linkStrokeLineJoin).attr("stroke-width", options.linkStrokeWidth);
     const node = svg.append("g").selectAll("circle").data(descendants).join("circle").attr("stroke", options.nodeStroke).attr("stroke-width", options.nodeStrokeWidth).attr("r", options.nodeRadius).attr("fill", options.nodeFill);
     node.append("title").text(options.nodeTitle);
     simulation.on("tick", () => {
-      link.attr("x1", (d) => d.source.x).attr("y1", (d) => d.source.y).attr("x2", (d) => d.target.x).attr("y2", (d) => d.target.y);
+      link2.attr("x1", (d) => d.source.x).attr("y1", (d) => d.source.y).attr("x2", (d) => d.target.x).attr("y2", (d) => d.target.y);
       node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
     });
     return new Promise((resolve, reject) => {
@@ -3724,23 +3943,38 @@
     nodeTextStrokeWidth: 2,
     nodeTextSize: 10
   };
+  async function generateRadialTree(root2, opts = defaultOptions2) {
+    const options = { ...defaultOptions2, ...opts };
+    const svg = select_default2(document.body).append("svg").attr("width", "100%").attr("height", "100%").attr("viewBox", [
+      -options.radius - options.marginLeft,
+      -options.radius - options.marginTop,
+      2 * options.radius + options.marginRight,
+      2 * options.radius + options.marginBottom
+    ]);
+    const tree = tree_default().size([options.angle, options.radius]).separation(options.separator);
+    const nodes = tree(hierarchy(root2));
+    nodes.sort(options.sortFn);
+    const descendants = nodes.descendants();
+    const links = nodes.links();
+    svg.append("g").selectAll("path").data(links).join("path").attr("fill", "none").attr("stroke", options.linkStroke).attr("stroke-width", options.linkStrokeWidth).attr("stroke-opacity", options.linkStrokeOpacity).attr("stroke-linecap", options.linkStrokeLineCap).attr("stroke-linejoin", options.linkStrokeLineJoin).attr("d", linkRadial().angle((d) => d.x).radius((d) => d.y));
+    const node = svg.append("g").selectAll("a").data(descendants).join("a").attr("transform", (d) => `rotate(${d.x * 180 / Math.PI - 90}) translate(${d.y},0)`);
+    node.append("circle").attr("fill", options.nodeFill).attr("r", options.nodeRadius);
+    node.append("title").text((d) => d.data.name);
+    node.append("text").attr("transform", (d) => `rotate(${d.x >= Math.PI ? 180 : 0})`).attr("dy", "0.32em").attr("x", (d) => d.x < Math.PI === !d.children ? 6 : -6).attr("text-anchor", (d) => d.x < Math.PI === !d.children ? "start" : "end").attr("paint-order", "stroke").attr("stroke", options.nodeTextStroke).attr("stroke-width", options.nodeTextStrokeWidth).attr("font-size", options.nodeTextSize).attr("fill", options.nodeFill).text((d, i) => d.data.name);
+    return svg.node();
+  }
 
   // src/views/script.ts
   window.addEventListener("message", (event) => {
     const message = event.data;
-    console.log(message.payload);
     switch (message.type) {
       case "force-directed-graph":
-        showForceDirectedGraph(message.payload);
+        generateForceDirectedGraph(message.payload);
         break;
+      case "radial-tree":
+        generateRadialTree(message.payload);
       default:
         break;
     }
   });
-  async function showForceDirectedGraph(tree) {
-    const svg = await generateForceDirectedGraph(tree);
-    if (svg) {
-      document.body.appendChild(svg);
-    }
-  }
 })();
