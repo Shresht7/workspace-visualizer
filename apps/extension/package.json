@@ -36,15 +36,15 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "build:extension": "npm run compile",
+    "vscode:prepublish": "npm run build -- --minify",
+    "build:extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
     "build:script": "esbuild ./src/views/script.ts --bundle --outfile=./media/script.js",
     "build": "npm run build:extension && npm run build:script",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "dev": "npm run build -- --sourcemap",
+    "watch": "npm run build -- --sourcemap --watch",
+    "pretest": "npm run build && npm run lint",
     "lint": "eslint src --ext ts",
-    "#test": "node ./dist/test/runTest.js"
+    "test-compile": "tsc -p ./"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
