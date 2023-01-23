@@ -3,6 +3,7 @@ import * as d3 from 'd3' // Data-Visualization Library
 
 // Type Definitions
 import type { Node } from '@workspace-visualizer/fs-tree'
+import type { StrokeLineCap, StrokeLineJoin } from '../types'
 
 // ----------------
 // TYPE DEFINITIONS

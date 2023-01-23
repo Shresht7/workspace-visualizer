@@ -3,7 +3,7 @@
 // ================
 
 /** Stroke linecap of the links */
-type StrokeLineCap = 'butt' | 'round' | 'square' | 'inherit';
+export type StrokeLineCap = 'butt' | 'round' | 'square' | 'inherit';
 
 /** Stroke linejoin of the links */
-type StrokeLineJoin = 'miter' | 'round' | 'bevel' | 'inherit';
+export type StrokeLineJoin = 'miter' | 'round' | 'bevel' | 'inherit';
