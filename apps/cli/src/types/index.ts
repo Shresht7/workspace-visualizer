@@ -23,6 +23,6 @@ interface Argument<T = any> {
 interface Option<T = any> {
     name: string;
     description: string;
-    default: T;
+    default?: T,
     required?: boolean;
 }

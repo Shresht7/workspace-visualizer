@@ -40,102 +40,82 @@ const command: Command<Graph> = {
         {
             name: "-w, --width [width]",
             description: "The width of the output SVG",
-            default: 400
         },
         {
             name: "-h, --height [height]",
             description: "The height of the output SVG",
-            default: 400
         },
         {
             name: "--margin-top [marginTop]",
             description: "The top margin of the output SVG",
-            default: 10
         },
         {
             name: "--margin-right [marginRight]",
             description: "The right margin of the output SVG",
-            default: 10
         },
         {
             name: "--margin-bottom [marginBottom]",
             description: "The bottom margin of the output SVG",
-            default: 10
         },
         {
             name: "--margin-left [marginLeft]",
             description: "The left margin of the output SVG",
-            default: 10
         },
         {
             name: "--center-x [centerX]",
             description: "The x position of the center of the graph",
-            default: 200
         },
         {
             name: "--center-y [centerY]",
             description: "The y position of the center of the graph",
-            default: 200
         },
         {
             name: "--link-strength [linkStrength]",
             description: "The strength of the links between nodes",
-            default: 1
         },
         {
             name: "--link-distance [linkDistance]",
             description: "The distance between nodes",
-            default: 30
         },
         {
             name: "--node-force [nodeForce]",
             description: "The force of the nodes",
-            default: -60
         },
         {
             name: "--link-stroke [linkStroke]",
             description: "The stroke color of the links",
-            default: "#333"
         },
         {
             name: "--link-stroke-width [linkStrokeWidth]",
             description: "The stroke width of the links",
-            default: "1px"
         },
         {
             name: "--link-stroke-opacity [linkStrokeOpacity]",
             description: "The stroke opacity of the links",
-            default: 0.6
         },
         {
             name: "--link-stroke-linecap [linkStrokeLinecap]",
             description: "The stroke linecap of the links",
-            default: "round"
         },
         {
             name: "--link-stroke-linejoin [linkStrokeLinejoin]",
             description: "The stroke linejoin of the links",
-            default: "round"
         },
         {
             name: "--node-stroke [nodeStroke]",
             description: "The stroke color of the nodes",
-            default: "#fff"
         },
         {
             name: "--node-stroke-width [nodeStrokeWidth]",
             description: "The stroke width of the nodes",
-            default: "1px"
         },
         {
             name: "--node-radius [nodeRadius]",
             description: "The radius of the nodes",
-            default: 5
         },
         {
             name: "--node-fill [nodeFill]",
             description: "The fill color of the nodes",
-            default: "#999"
         }
     ],
     /** Create a graph of your workspace */
