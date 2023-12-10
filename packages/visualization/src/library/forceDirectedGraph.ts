@@ -29,9 +29,9 @@ export interface ForceDirectedGraphOptions {
     // ----------------------------
 
     /** X position of the center of the force-directed-graph */
-    centerX: number,
+    centerX?: number,
     /** Y position of the center of the force-directed-graph */
-    centerY: number,
+    centerY?: number,
     /** Strength of the links */
     linkStrength: number | ((d: d3.HierarchyPointLink<Node>) => number),
     /** Distance of the links */
@@ -88,8 +88,6 @@ const defaultOptions: ForceDirectedGraphOptions = {
     marginLeft: 0,
 
     // Force Directed Graph Options
-    centerX: 200, // Half of the width
-    centerY: 200, // Half of the height
     linkStrength: 1,
     linkDistance: 30,
     nodeForce: -60,
@@ -152,8 +150,8 @@ export async function generateForceDirectedGraph(root: Node, opts: Partial<Force
     const links = nodes.links()
 
     // Create simulation
-    const centerX = options.width / 2
-    const centerY = options.height / 2
+    const centerX = options?.centerX || options.width / 2
+    const centerY = options?.centerY || options.height / 2
     const simulation = d3.forceSimulation(descendants)
         .force('center', d3.forceCenter(centerX, centerY))
         .force('charge', d3.forceManyBody().strength(options.nodeForce))
