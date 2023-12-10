@@ -5,7 +5,7 @@ import extensionColors from './fileColors.js'; // Assigns colors to file extensi
 /**
  * Determines the color based on the file extension
  * @param path The path to the file
- * @param fallbackColor The fallback color (default: #000000)
+ * @param fallbackColor The fallback color - hex format (default: #000000)
  * @returns The associated color
  * @example
  * const color = getExtensionColor("./file.js")
@@ -17,7 +17,7 @@ export function getExtensionColor(path: string, fallbackColor: string = "#000000
     // Check if the extension is in the JSON file
     if (extension in extensionColors) {
         // Return the color of the extension
-        return extensionColors[extension as keyof typeof extensionColors]
+        return extensionColors[extension as keyof typeof extensionColors];
     } else {
         // Return the fallback color
         return fallbackColor;
