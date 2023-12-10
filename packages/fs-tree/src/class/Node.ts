@@ -97,15 +97,15 @@ export class Node {
         const ignoreFilter = this._getIgnoreFilter(this.path);
 
         // Read the directory
-        let entries = fs.readdirSync(this.path)
-        entries = entries.filter(ignoreFilter);
+        let entries = fs.readdirSync(this.path).filter(ignoreFilter)
 
+        // Iterate over the entries
         for (const entry of entries) {
             // Create the child node
             const childPath = path.join(this.path, entry);
             const child = new Node(childPath);
 
-            // Build the child tree
+            // Recursively build the child tree
             if (child.type === NodeType.Directory) {
                 child.buildTree();
             }
