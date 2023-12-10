@@ -20,7 +20,7 @@
     "@types/jsdom": "^20.0.1"
   },
   "dependencies": {
-    "commander": "^9.4.1",
+    "commander": "^11.1.0",
     "jsdom": "^23.0.1"
   }
 }
