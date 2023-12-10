@@ -3,6 +3,7 @@
 // ===========
 
 // This file contains a mapping of file-extensions and their associated colors.
+// See: https://github.com/github-linguist/linguist/blob/master/lib/linguist/languages.yml
 
 // TODO: Add more file extensions and colors to this file
 

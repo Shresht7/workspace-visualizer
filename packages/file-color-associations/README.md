@@ -51,6 +51,10 @@ node ./scripts/exportFileColorAssociations.js ./fileColors.json
 
 ---
 
+## 📕 Reference
+
+- https://github.com/github-linguist/linguist/blob/master/lib/linguist/languages.yml
+
 ## 📝 License
 
 [MIT License](./LICENSE)
