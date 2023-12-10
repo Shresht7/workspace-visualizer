@@ -12,11 +12,11 @@
 import { writeFileSync } from 'node:fs'; // Node.js file system module for writing files
 import extensionColors from '../fileColors.js'; // Assigns colors to file extensions
 
+// Constants
+const DEFAULT_FILENAME = "./fileColors.json";
+
 // Destination of the file from the command line
-let destination = process.argv[2];
-if (!destination) { // If null, use the default
-    destination = "./fileColors.json";
-}
+const destination = process.argv[2] || DEFAULT_FILENAME;
 
 // Write the JSON file to the destination
 writeFileSync(destination, JSON.stringify(extensionColors, null, 4));
