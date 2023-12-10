@@ -80,8 +80,8 @@ export interface ForceDirectedGraphOptions {
 const defaultOptions: ForceDirectedGraphOptions = {
 
     // SVG Options
-    width: 400,
-    height: 400,
+    width: 1200,
+    height: 1200,
     marginTop: 0,
     marginRight: 0,
     marginBottom: 0,
@@ -131,10 +131,10 @@ export async function generateForceDirectedGraph(root: Node, opts: Partial<Force
         .attr('width', '100%')
         .attr('height', '100%')
         .attr("viewBox", [
-            -options.width - options.marginLeft,
-            -options.height - options.marginTop,
-            2 * options.width + options.marginRight,
-            2 * options.height + options.marginBottom
+            0,
+            0,
+            options.width,
+            options.height
         ])
 
     // Create tree
@@ -152,8 +152,10 @@ export async function generateForceDirectedGraph(root: Node, opts: Partial<Force
     const links = nodes.links()
 
     // Create simulation
+    const centerX = options.width / 2
+    const centerY = options.height / 2
     const simulation = d3.forceSimulation(descendants)
-        .force('center', d3.forceCenter(options.centerX, options.centerY))
+        .force('center', d3.forceCenter(centerX, centerY))
         .force('charge', d3.forceManyBody().strength(options.nodeForce))
         .force('x', d3.forceX())
         .force('y', d3.forceY())
