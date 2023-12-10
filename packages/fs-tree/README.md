@@ -56,7 +56,7 @@ const tree = await snapshot({
 
 ## 📄 License
 
-[MIT License](LICENSE)
+This project is licensed under the [MIT License](LICENSE).
 
 <!-- ===== -->
 <!-- LINKS -->
