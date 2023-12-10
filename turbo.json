@@ -5,7 +5,8 @@
             "outputs": [
                 "build/**",
                 "dist/**"
-            ]
+            ],
+            "dependsOn": ["^build"]
         },
         "watch": {
             "outputs": [
@@ -17,7 +18,8 @@
             "outputs": [
                 "build/**",
                 "dist/**"
-            ]
+            ],
+            "dependsOn": ["^build"]
         }
     }
 }
