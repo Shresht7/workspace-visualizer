@@ -1,6 +1,6 @@
 # `workspace-visualizer/file-color-associations`
 
-This package provides a way to associate a color with a file extension.
+This package provides a helper function to associate a a file-extension to a color.
 
 ---
 
@@ -57,4 +57,4 @@ node ./scripts/exportFileColorAssociations.js ./fileColors.json
 
 ## 📝 License
 
-[MIT License](./LICENSE)
+This project is licensed under the [MIT License](./LICENSE).
