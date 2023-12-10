@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "type": "module",
+  "private": true,
   "scripts": {
     "start": "node build/index.js",
     "build": "npm run build:tsc && npm run build:export",
@@ -14,7 +15,15 @@
     "test": "vitest",
     "clean": "npx rimraf build node_modules"
   },
-  "keywords": [],
+  "keywords": [
+    "workspace-visualizer",
+    "file-colors",
+    "file-color-associations"
+  ],
   "author": "Shresht7",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shresht7/workspace-visualizer/"
+  },
   "license": "MIT"
 }
