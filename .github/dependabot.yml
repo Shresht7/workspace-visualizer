@@ -19,5 +19,5 @@ updates:
         dependency-type: "development"
         update-types:
           - "minor"
-            "patch"
+          - "patch"
       
