@@ -50,13 +50,13 @@
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.1",
     "@types/vscode": "^1.87.0",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "@vscode/test-electron": "^2.3.9",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.20.2",
     "eslint": "^8.57.0",
-    "glob": "^10.3.10",
-    "mocha": "^10.3.0"
+    "glob": "^10.3.12",
+    "mocha": "^10.4.0"
   },
   "dependencies": {
     "ignore": "^5.3.1"
