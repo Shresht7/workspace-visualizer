@@ -12,9 +12,9 @@
         "clean": "npx rimraf build node_modules"
     },
     "devDependencies": {
-        "@types/node": "^20.12.7",
+        "@types/node": "^20.13.0",
         "turbo": "^1.13.3",
         "typescript": "^5.4.5",
-        "vitest": "^1.5.3"
+        "vitest": "^1.6.0"
     }
 }
