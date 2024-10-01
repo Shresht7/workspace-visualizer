@@ -59,6 +59,6 @@
     "mocha": "^10.7.3"
   },
   "dependencies": {
-    "ignore": "^5.3.2"
+    "ignore": "^6.0.2"
   }
 }
